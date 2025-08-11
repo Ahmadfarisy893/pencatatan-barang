@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
-
     <!-- Global Stylesheets Bundle -->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -123,46 +122,57 @@
                             </li>
                         @endif
                     @else
-                        <!-- User Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                                <div class="bg-primary img-rounded d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                    <span class="text-white fw-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
-                                </div>
-                                <span class="ms-2">{{ Auth::user()->name }}</span>
+                    <!-- User Dropdown -->
+                    <li class="nav-item dropdown d-flex align-items-center">
+                        <!-- Gmail Icon -->
+                        <li class="nav-item d-flex align-items-center me-3">
+                            <a href="#" class="nav-link position-relative" title="Gmail" data-bs-toggle="modal" data-bs-target="#gmailModal">
+                                <i class="fas fa-envelope text-white" style="font-size: 18px;"></i>
+                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle gmail-badge" style="font-size: 10px;">0</span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <i class="fas fa-user me-2"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <i class="fas fa-cog me-2"></i>
-                                    Settings
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt me-2"></i>
-                                    {{ __('Logout') }}
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
                         </li>
+
+                        <!-- Profile Dropdown -->
+                        <a id="navbarDropdown" class="nav-link d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <span class="ms-2">{{ Auth::user()->name }}</span>
+                            <div class="bg-primary rounded d-flex align-items-center justify-content-center mx-2" style="width: 32px; height: 32px;">
+                                <span class="text-white fw-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="fas fa-user me-2"></i>
+                                Profile
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="fas fa-cog me-2"></i>
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                {{ __('Logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </li>
                     @endguest
                 </ul>
             </div>
         </div>
     </nav>
-    
         <main class="py-4 px-4">
             @yield('content')
         </main>
     </div>
+
 </div>
+
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
