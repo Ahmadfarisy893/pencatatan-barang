@@ -32,7 +32,6 @@
   </div>
 
   <!-- Daftar Barang yang Dipinjam -->
-  @foreach($barangDipinjam as $item)
     <div class="col-md-12 mb-3">
       <div class="card shadow-sm">
         <div class="row g-0 align-items-center">
@@ -41,22 +40,21 @@
           </div>
           <div class="col-md-9">
             <div class="card-body">
-              <h5 class="card-title mb-1">{{ $item->nama_barang }}</h5>
-              <p class="mb-1"><strong>Kode:</strong> {{ $item->kode_barang }}</p>
+              <h5 class="card-title mb-1"></h5>
+              <p class="mb-1"><strong>Kode:</strong> </p>
               <p class="mb-1"><strong>Status:</strong>
-                @if($item->status == 'dipinjam')
+                
                   <span class="badge bg-warning">Dipinjam</span>
-                @else
+                
                   <span class="badge bg-success">Tersedia</span>
-                @endif
+                
               </p>
-              <p class="mb-1"><strong>Peminjam:</strong> {{ $item->peminjam ?? '-' }}</p>
-              <p class="text-muted mb-0"><small>Terakhir diperbarui: {{ $item->updated_at->diffForHumans() }}</small></p>
+              <p class="mb-1"><strong>Peminjam:</strong></p>
+              <p class="text-muted mb-0"><small>Terakhir diperbarui:</small></p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  @endforeach
 </div>
 @endsection
