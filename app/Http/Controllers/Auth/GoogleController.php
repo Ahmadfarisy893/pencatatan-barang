@@ -41,4 +41,5 @@ class GoogleController extends Controller
             return redirect()->route('auth.login')->with('error', 'Gagal login dengan Google.');
         }
     }
+    
 }

@@ -49,6 +49,6 @@ class CategoriesController extends Controller
     {
         $categories = categories::findOrFail($id);
         $categories->delete();
-        return redirect()->route('categories.index')->with('success', 'Data berhasil diupdate.');
+        return redirect()->route('categories.index')->with('success', 'Data berhasil dihapus.');
     }    
 }

@@ -26,7 +26,7 @@ class peminjaman extends Model
         return $this->belongsTo(Pegawai::class);
     }
 
-    // mempermudah mengambil kategori lewat barang
+    // mengambil nilai kategori dari barang yang dipinjam
     public function category()
     {
         return $this->barang?->category();

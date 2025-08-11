@@ -64,7 +64,7 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::findOrFail($id);
         $pegawai->delete();
-        return redirect()->route('pegawai.index')->with('success', 'Data berhasil diupdate.');
+        return redirect()->route('pegawai.index')->with('success', 'Data berhasil dihapus.');
     }
     public function view($id)
     {

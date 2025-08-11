@@ -1,13 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\controllers\AuthController;
+use App\Http\controllers\Auth\AuthController;
 use App\Http\Controllers\Master\PegawaiController;
 use App\Http\Controllers\Master\CategoriesController;
 use App\Http\Controllers\Master\BarangController;
 use App\Http\Controllers\Master\PeminjamanController;
 use App\Http\Controllers\Auth\GoogleController;
-
 
 Route::get('/', function () {
     return view('welcome');
