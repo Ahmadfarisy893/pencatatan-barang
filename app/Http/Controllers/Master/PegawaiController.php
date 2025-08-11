@@ -68,10 +68,15 @@ class PegawaiController extends Controller
     }
     public function view($id)
     {
-    $pegawai = Pegawai::findOrFail($id); // cari berdasarkan ID, error jika tidak ketemu
-    $barangDipinjam = Peminjaman::where('pegawai_id', $pegawai->id)->with('barang')->get();
+    $pegawai = Pegawai::findOrFail($id);
 
-    return view('pegawai.view', compact('pegawai', 'barangDipinjam'));
+    // Ambil daftar peminjaman untuk pegawai ini
+    $peminjaman = Peminjaman::with('barang.category')
+        ->where('nip', $pegawai->nip) // filter berdasarkan nip
+        ->orderBy('tanggal_pemberian', 'desc')
+        ->get();
+
+    return view('pegawai.view', compact('pegawai', 'peminjaman'));
     }
 
 }
