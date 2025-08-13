@@ -14,6 +14,9 @@
                     <div class="form-group mb-3">
                         <label for="nip">NIP</label>
                         <input type="text" name="nip" class="form-control form-control-user" placeholder="NIP" required>
+                        @error('nip')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group mb-3">
@@ -29,7 +32,14 @@
                             <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
-
+                    <div class="mb-3">
+                        <label for="status_kerja" class="form-label">Status Kerja</label>
+                        <select name="status_kerja" id="status_kerja" class="form-control">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Pensiun">Pensiun</option>
+                            <option value="Mengundurkan Diri">Mengundurkan Diri</option>
+                        </select>
+                    </div>
                     <div class="d-flex justify-content-between align-items-center mt-2 mb-2">
                          <button type="submit" class="btn btn-primary btn-user btn-block w-50">
                             Simpan Data

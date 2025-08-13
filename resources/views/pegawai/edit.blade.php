@@ -32,6 +32,14 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="mb-3">
+                            <label for="status_kerja" class="form-label">Status Kerja</label>
+                            <select name="status_kerja" id="status_kerja" class="form-control">
+                                <option value="Aktif" {{ old('status_kerja', $pegawai->status_kerja ?? '') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                <option value="Pensiun" {{ old('status_kerja', $pegawai->status_kerja ?? '') == 'Pensiun' ? 'selected' : '' }}>Pensiun</option>
+                                <option value="Mengundurkan Diri" {{ old('status_kerja', $pegawai->status_kerja ?? '') == 'Mengundurkan Diri' ? 'selected' : '' }}>Mengundurkan Diri</option>
+                            </select>
+                        </div>
                     <div class="d-flex justify-content-between align-items-center mt-2 mb-2">
                         <button type="submit" class="btn btn-success btn-user w-50">
                             Update Data

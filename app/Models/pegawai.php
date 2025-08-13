@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class pegawai extends Model
 {
     protected $table = 'pegawai';
-    protected $fillable = ['nip', 'nama', 'jenis_kelamin'];
+    protected $fillable = ['nip', 'nama', 'jenis_kelamin', 'status_kerja'];
 
     public function peminjaman()
     {

@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pegawai', function (Blueprint $table) {
-            $table->id();
-            $table->string('nip')->unique(); // Nomor Induk Pegawai
-            $table->string('nama');
+        Schema::table('pegawai', function (Blueprint $table) {
             $table->string('status_kerja')->default('Aktif');
-            $table->timestamps();
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pegawai');
+        Schema::table('pegawai', function (Blueprint $table) {
+            $table->dropColumn('status_kerja');
+        });
     }
 };

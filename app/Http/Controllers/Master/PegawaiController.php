@@ -27,13 +27,14 @@ class PegawaiController extends Controller
             'nip' => 'required|string|unique:pegawai,nip|max:20',
             'nama' => 'required|string|max:100',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'status_kerja' => 'required|in:Aktif,Pensiun,Mengundurkan Diri',
         ]);
         
         Pegawai::create([
             'nip' => $request->nip,
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
-
+            'status_kerja' => $request->status_kerja ?? 'Aktif', // Default status kerja jika tidak diisi
         ]);
         return redirect()->route('pegawai.index')->with('success', 'Data berhasil ditambahkan.');
     }
@@ -50,6 +51,7 @@ class PegawaiController extends Controller
             'nip' => 'required|string|max:20|unique:pegawai,nip,' . $id,
             'nama' => 'required|string|max:100',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'status_kerja' => 'required|in:Aktif,Pensiun,Mengundurkan Diri',
         ]);
 
         $pegawai = Pegawai::findOrFail($id);
@@ -57,6 +59,7 @@ class PegawaiController extends Controller
             'nip' => $request->nip,
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
+            'status_kerja' => $request->status_kerja ?? 'Aktif',
         ]);
         return redirect()->route('pegawai.index')->with('success', 'Data berhasil diupdate.');
     }

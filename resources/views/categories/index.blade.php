@@ -14,7 +14,7 @@
             {{ session('success') }}
         </div>
     @endif
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped table-responsive table-hover align-middle text-center rounded-3 overflow-hidden">
         <thead class="table-primary">
             <tr>
                 <th>No</th>
@@ -28,16 +28,33 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $item->name }}</td>
                 <td>
-                    <a href="{{ route('categories.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                    <form action="{{ route('categories.destroy', $item->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Yakin hapus data?')">
+                    <a href="{{ route('categories.edit', $item->id) }}" class="btn btn-sm btn-warning rounded-pill">Update</a>
+                    <!--<form action="{{ route('categories.destroy', $item->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Yakin hapus data?')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                    </form>
+                    </form>-->
                 </td>
            </tr>
            @endforeach
         </tbody>
     </table>
 </div>
+
+<style>
+    /* Supaya sudut tabel melengkung */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 0.75rem; /* radius 12px */
+        box-shadow: 1px 2px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    tbody {
+        background-color: #F8FAFC; /* Warna latar belakang tabel */
+        color: #030303ff;
+    }
+
+   
+</style>
 @endsection
