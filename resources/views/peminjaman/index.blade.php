@@ -80,6 +80,7 @@
     }
 </style>
 <script>
+// Search
 $(document).ready(function(){
     // Simpan isi asli semua cell saat halaman dimuat
     $("#myTable tr").each(function(){
