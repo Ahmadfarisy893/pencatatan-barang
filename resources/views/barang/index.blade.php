@@ -34,7 +34,19 @@
                     <td>{{ $barang->nama_barang }}</td>
                     <td>{{ optional($barang->category)->name }}</td>
                     <td>{{ $barang->jumlah }}</td>
-                    <td>{{ ucfirst($barang->kondisi) }}</td>
+                    <td> @php
+                            if ($barang->kondisi === 'baik') {
+                                $badgeClass = 'badge bg-light-success text-success';
+                            } elseif ($barang->kondisi === 'rusak') {
+                                $badgeClass = 'badge bg-light-danger text-danger';
+                            } elseif ($barang->kondisi === 'perlu perbaikan') {
+                                $badgeClass = 'badge bg-light-warning text-warning';
+                            } else {
+                                $badgeClass = 'badge bg-secondary';
+                            }
+                        @endphp
+                        <span class="{{ $badgeClass }}">{{ ucfirst($barang->kondisi) }}</span>
+                    </td>
                     <td class="d-flex justify-content-center gap-2">
                         <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-sm btn-warning rounded-pill">
                             Update

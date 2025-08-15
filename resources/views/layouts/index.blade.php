@@ -107,13 +107,13 @@
                     @else
                     <!-- User Dropdown -->
                     <li class="nav-item dropdown d-flex align-items-center">
-                        <!-- Gmail Icon -->
                         <li class="nav-item d-flex align-items-center me-3">
-                            <a href="#" class="nav-link position-relative" title="Gmail" data-bs-toggle="modal" data-bs-target="#gmailModal">
+                            <a href="{{ url('/mail/welcome-email') }}" class="nav-link position-relative" title="Gmail">
                                 <i class="fas fa-envelope text-white" style="font-size: 18px;"></i>
                                 <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle gmail-badge" style="font-size: 10px;">0</span>
                             </a>
                         </li>
+                        <!-- Gmail Icon -->
 
                         <!-- Profile Dropdown -->
                         <a id="navbarDropdown" class="nav-link d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
