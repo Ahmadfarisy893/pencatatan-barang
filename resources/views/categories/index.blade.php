@@ -1,12 +1,14 @@
 @extends('dashboard')
 
 @section('content')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <div class="container">
     <h1>Category Barang</h1>
-        <div class="d-flex justify-content-between align-items-center mt-5 mb-3 ">
-            <h4 class="mb-0">Category</h4>
-                <a href="{{ route('categories.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i> Tambah category
+       <div class="d-flex justify-content-between align-items-center mt-5 mb-3 gap-8">
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                <a href="{{ route('categories.create') }}" class="btn btn-primary d-flex align-items-center" style="height: 50px;">
+                    <i class="fas fa-plus me-2"></i> Tambah categories
                 </a>
         </div>
     @if (session('success'))
@@ -22,7 +24,7 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="myTable">
            @foreach ($categories as $index=> $item)
            <tr>
                 <td>{{ $index + 1 }}</td>
@@ -54,7 +56,63 @@
         background-color: #F8FAFC; /* Warna latar belakang tabel */
         color: #030303ff;
     }
-
-   
+    .highlight {
+    background-color: yellow;
+    padding: 2px 4px;
+    border-radius: 3px;
+    }
 </style>
+<script>
+$(document).ready(function(){
+    // Simpan isi asli semua cell saat halaman dimuat
+    $("#myTable tr").each(function(){
+        $(this).find("td").each(function(){
+            $(this).attr("data-original", $(this).html());
+        });
+    });
+
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        var found = false;
+
+        // Reset isi cell dari data-original agar tombol kembali seperti semula
+        $("#myTable tr").each(function(){
+            $(this).find("td").each(function(){
+                $(this).html($(this).attr("data-original"));
+            });
+        });
+
+        // Filter baris
+        $("#myTable tr").filter(function() {
+            var rowText = $(this).text().toLowerCase();
+            var match = rowText.indexOf(value) > -1;
+
+            $(this).toggle(match);
+
+            if (match && value !== "") {
+                found = true;
+                // Highlight hanya teks biasa (bukan tombol)
+                $(this).find("td").each(function(){
+                    if ($(this).find("a, button").length === 0) {
+                        var cellText = $(this).text();
+                        var regex = new RegExp("(" + value + ")", "gi");
+                        $(this).html(cellText.replace(regex, "<span class='highlight'>$1</span>"));
+                    }
+                });
+            } else if (match) {
+                found = true;
+            }
+        });
+
+        // Pesan "tidak ditemukan"
+        if (!found && value !== "") {
+            if ($("#noData").length === 0) {
+                $("#myTable").append("<tr id='noData'><td colspan='7' class='text-center text-danger'>Data tidak ditemukan</td></tr>");
+            }
+        } else {
+            $("#noData").remove();
+        }
+    });
+});
+</script>
 @endsection
