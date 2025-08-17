@@ -41,6 +41,12 @@
            @endforeach
         </tbody>
     </table>
+    <ul id="pagination" class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">Next</a></li>
+    </ul>
 </div>
 
 <style>
@@ -61,7 +67,14 @@
     padding: 2px 4px;
     border-radius: 3px;
     }
+    .pagination .page-item.active .page-link {
+    background-color: #2a83dcff;
+    border-color: #2a83dcff;
+    color: white;
+    }
 </style>
+
+<!-- Script untuk pencarian -->
 <script>
 $(document).ready(function(){
     // Simpan isi asli semua cell saat halaman dimuat
@@ -113,6 +126,81 @@ $(document).ready(function(){
             $("#noData").remove();
         }
     });
+});
+</script>
+
+<!-- Script untuk pagination -->
+<script>
+$(function(){
+    const rowsPerPage = 5;
+    const allRows = $("#myTable tr");
+    const numbers = $("#pagination");
+
+    // Simpan isi asli cell
+    allRows.find("td").each(function(){
+        $(this).attr("data-original", $(this).html());
+    });
+
+    // Fungsi tampilkan halaman
+    function showPage(page, rows){
+        const start = (page-1)*rowsPerPage, end = start+rowsPerPage;
+        allRows.hide(); rows.hide().slice(start,end).show();
+
+        $(".page-item").removeClass("active");
+        $(".page-num").filter((_,el)=>$(el).text()==page).parent().addClass("active");
+
+        numbers.data({current:page, rows});
+    }
+
+    // Buat pagination
+    function renderPagination(rows){
+        const count = rows.length, pages = Math.ceil(count/rowsPerPage);
+        numbers.empty(); $("#noData").remove();
+
+        if(!count){
+            $("#myTable").append("<tr id='noData'><td colspan='7' class='text-center text-danger'>Data tidak ditemukan</td></tr>");
+            return;
+        }
+
+        numbers.append(`<li class="page-item"><a class="page-link nav-btn" data-dir="-1" href="#">Previous</a></li>`);
+        for(let i=1;i<=pages;i++) numbers.append(`<li class="page-item"><a class="page-link page-num" href="#">${i}</a></li>`);
+        numbers.append(`<li class="page-item"><a class="page-link nav-btn" data-dir="1" href="#">Next</a></li>`);
+
+        showPage(1, rows);
+    }
+
+    // Pagination click
+    numbers.on("click",".page-num, .nav-btn",function(e){
+        e.preventDefault();
+        const {current, rows} = numbers.data(), pages = Math.ceil(rows.length/rowsPerPage);
+        let page = $(this).hasClass("page-num") ? parseInt($(this).text()) : current + +$(this).data("dir");
+        if(page>=1 && page<=pages) showPage(page, rows);
+    });
+
+    // Search
+    $("#myInput").on("keyup",function(){
+        const val = $(this).val().toLowerCase();
+        allRows.each(function(){
+            $(this).find("td").each(function(){
+                $(this).html($(this).attr("data-original"));
+            });
+        });
+
+        const filtered = allRows.filter(function(){
+            const text = $(this).text().toLowerCase(), match = text.includes(val);
+            if(match && val) $(this).find("td").each(function(){
+                if(!$(this).find("a,button").length){
+                    $(this).html($(this).text().replace(new RegExp(`(${val})`,"gi"),"<span class='highlight'>$1</span>"));
+                }
+            });
+            return match;
+        });
+
+        renderPagination(filtered);
+    });
+
+    // Init pertama
+    renderPagination(allRows);
 });
 </script>
 @endsection
