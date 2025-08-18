@@ -13,6 +13,8 @@
     <!-- Global Stylesheets Bundle -->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body class="bg-body">
     <div class="d-flex flex-column flex-root">

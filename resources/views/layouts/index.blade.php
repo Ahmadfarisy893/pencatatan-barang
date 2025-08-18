@@ -65,6 +65,15 @@
                 <span>Berita Acara</span>
             </a>
         </li>
+        {{-- menu Users hanya untuk Super Admin --}}
+         @if(Auth::user()->role === 'Super Admin')
+             <li class="nav-item fs-4">
+                 <a class="nav-link text-white d-flex align-items-center" href="{{ url('/users') }}">
+                     <i class="fas fa-users me-3 text-white"></i>
+                     <span>Users</span>
+                 </a>
+             </li>
+         @endif
     </ul>
 </nav>
 

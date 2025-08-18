@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http; 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'role' => 'Admin',
         ]);
 
         return redirect()->route('login')->with('success', 'Registration successful. Please log in.');
@@ -40,7 +42,19 @@ class AuthController extends Controller
     $request->validate([
         'email' => 'required|email',
         'password' => 'required|string',
+        'g-recaptcha-response' => 'required',
     ]);
+
+     // Verifikasi captcha ke Google
+    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        'secret' => env('RECAPTCHA_SECRET_KEY'),
+        'response' => $request->input('g-recaptcha-response'),
+        'remoteip' => $request->ip(),
+    ]);
+
+    if (! $response->json()['success']) {
+        return back()->withErrors(['g-recaptcha-response' => 'Captcha verification failed.'])->withInput();
+    }
 
     $user = User::where('email', $request->email)->first();
 

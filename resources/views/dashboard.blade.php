@@ -8,8 +8,7 @@
         <h5 class="card-title text-primary">Congratulations  {{ Auth::user()->name }} 🎉</h5>
           
         <p class="mb-4">
-          You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in
-          your profile.
+          Role Anda: {{ Auth::user()->role }}
         </p>
         <a href="" class="btn btn-sm btn-primary">View Badges</a>
       </div>

@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Master\PegawaiController;
 use App\Http\Controllers\Master\CategoriesController;
 use App\Http\Controllers\Master\BarangController;
 use App\Http\Controllers\Master\PeminjamanController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\EmailController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,14 +17,23 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
+Route::get('/mail/welcome-email', [EmailController::class, 'sendWelcomeEmail'])->name('send-email');
+
+// Google Authentication
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('login.google');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
 
 Route::get('auth/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('auth/login', [AuthController::class, 'login'])->name('postLogin');
 Route::get('auth/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('auth/register', [AuthController::class, 'register'])->name('postRegister');;
-Route::post('auth/logout', [AuthController::class, 'logout'])->name('logout'); 
+Route::post('auth/register', [AuthController::class, 'register'])->name('postRegister');
+Route::post('auth/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+// hanya Super Admin yang boleh akses users
+Route::middleware(['auth', 'cekrole:Super Admin'])->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+});
 
 Route::prefix('pegawai')->group(function () {
     Route::get('/', [PegawaiController::class, 'index'])->name('pegawai.index');

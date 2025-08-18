@@ -41,6 +41,16 @@
             <span class="form-check-label">Remember me</span>
         </label>
     </div>
+
+	<!-- Captcha -->
+	<div class="fv-row mb-10">
+    	<div class="g-recaptcha d-inline-block" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+    	@error('g-recaptcha-response')
+    	    <div class="text-danger small mt-1">{{ $message }}</div>
+    	@enderror
+	</div>
+    <!--end::Captcha-->
+
 	<!--begin::Actions-->
 	<div class="text-center">
 		<!--begin::Submit button-->
