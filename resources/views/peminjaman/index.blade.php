@@ -28,6 +28,7 @@
                     <th>Jumlah</th>
                     <th>Tanggal Pemberian</th>
                     <th>Action</th>
+                    <th>Cetak</th>
                 </tr>
             </thead>
             <tbody id="myTable">
@@ -42,12 +43,15 @@
                         <td>{{ \Carbon\Carbon::parse($loan->tanggal_pemberian)->format('d-m-Y') }}</td>
                         <td class="d-flex justify-content-center gap-2">
                             <a href="{{ route('peminjaman.edit', $loan->id) }}" class="btn btn-sm btn-warning rounded-pill">Update</a>
-                            <!--
-                            <form action="{{ route('peminjaman.destroy', $loan->id) }}" method="POST" onsubmit="return confirm('Yakin hapus peminjaman?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-danger rounded-pill">Hapus</button> -->
-                            </form>
+                        </td>
+                        <td class="my-2">
+                            {{-- Preview di tab baru (stream) --}}
+                            <a href="{{ route('peminjaman.cetak', $loan->id) }}" target="_blank"
+                               class="btn btn-sm btn-success rounded-pill">Cetak</a>
+
+                            {{-- (Opsional) Tombol paksa download PDF --}}
+                            {{-- <a href="{{ route('peminjaman.cetak', $loan->id) }}?dl=1"
+                               class="btn btn-sm btn-outline-success rounded-pill">Download</a> --}}
                         </td>
                     </tr>
                 @empty

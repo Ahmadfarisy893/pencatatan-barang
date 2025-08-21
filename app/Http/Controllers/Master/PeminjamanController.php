@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\peminjaman;
 use App\Models\barang;
 use App\Models\pegawai;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -92,5 +93,21 @@ class PeminjamanController extends Controller
         $peminjaman->delete();
 
         return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil dihapus.');
+    }
+    public function cetak($id)
+    {
+        // Ambil data + relasi yang dibutuhkan
+        $loan = Peminjaman::with(['barang.category'])->findOrFail($id);
+
+        // Render view ke PDF
+        $pdf = Pdf::loadView('peminjaman.cetak', [
+            'loan' => $loan,
+        ])->setPaper('A4', 'portrait');
+
+        // ?dl=1 untuk paksa download, default preview (stream)
+        $filename = 'BAST_'.$loan->nip.'_'.$loan->id.'.pdf';
+        return request()->boolean('dl')
+            ? $pdf->download($filename)
+            : $pdf->stream($filename);
     }
 }

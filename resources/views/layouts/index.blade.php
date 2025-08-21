@@ -59,12 +59,6 @@
                 <span>Peminjaman</span>
             </a>
         </li>
-        <li class="nav-item fs-4">
-            <a class="nav-link text-white d-flex align-items-center" href="{{ url('/laporan') }}">
-                <i class="fas fa-file-alt me-3 text-white" style="width: 20px; font-size:20px;"></i>
-                <span>Berita Acara</span>
-            </a>
-        </li>
         {{-- menu Users hanya untuk Super Admin --}}
          @if(Auth::user()->role === 'Super Admin')
              <li class="nav-item fs-4">
