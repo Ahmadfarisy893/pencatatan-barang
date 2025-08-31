@@ -9,7 +9,7 @@
                     <h4 class="text-gray-900">Tambah Pegawai</h4>
                 </div>
 
-                <form action="{{ route('pegawai.store') }}" method="POST" class="user">
+                <form action="{{ route('pegawai.store') }}" method="POST" class="user" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group mb-3">
                         <label for="nip">NIP</label>
@@ -18,12 +18,26 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-
                     <div class="form-group mb-3">
                         <label for="nama">Nama Pegawai</label>
                         <input type="text" name="nama" class="form-control form-control-user" placeholder="Nama Pegawai" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Upload Foto Pegawai</label>
+                        <input 
+                            class="form-control" 
+                            type="file" 
+                            id="formFile" 
+                            name="foto" 
+                            accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                            onchange="previewImage(event)" 
+                        />
 
+                        {{-- Tempat preview gambar --}}
+                        <div class="mt-3 text-center">
+                            <img id="preview" src="#" alt="Preview Foto" class="img-thumbnail d-none" width="200">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="jenis_kelamin">Jenis Kelamin</label>
                         <select name="jenis_kelamin" id="jenis_kelamin" class="form-control" required>
@@ -53,4 +67,30 @@
         </div>
     </div>
 </div>
+{{-- Script untuk preview gambar --}}
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+
+            if (!allowedTypes.includes(file.type)) {
+                alert("Hanya file gambar (JPG, PNG, GIF, WEBP) yang diperbolehkan!");
+                input.value = ""; // reset input file
+                preview.classList.add('d-none');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @endsection

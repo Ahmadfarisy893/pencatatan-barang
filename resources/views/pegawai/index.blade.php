@@ -59,7 +59,7 @@
                         </form>-->
                     </td>
                     <td>
-                        <a href="{{ route('pegawai.view', $item->id) }}" class="btn btn-sm btn-info rounded-pill">View</a>
+                        <a href="{{ route('pegawai.view',  Hashids::encode($item->id)) }}" class="btn btn-sm btn-info rounded-pill">View</a>
                     </td>
                 </tr>
             @empty

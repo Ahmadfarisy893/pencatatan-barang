@@ -32,7 +32,12 @@ Route::post('auth/logout', [AuthController::class, 'logout'])->name('logout');
 
 // hanya Super Admin yang boleh akses users
 Route::middleware(['auth', 'cekrole:Super Admin'])->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 });
 
 Route::prefix('pegawai')->group(function () {
@@ -42,10 +47,11 @@ Route::prefix('pegawai')->group(function () {
     Route::get('/pegawai/{id}/edit', [App\Http\Controllers\Master\PegawaiController::class, 'edit'])->name('pegawai.edit');
     Route::put('/pegawai/{id}', [App\Http\Controllers\Master\PegawaiController::class, 'update'])->name('pegawai.update');
     Route::delete('/pegawai/{id}', [App\Http\Controllers\Master\PegawaiController::class, 'destroy'])->name('pegawai.destroy');
-    Route::get('/pegawai/{id}/view', [PegawaiController::class, 'view'])->name('pegawai.view');
+    Route::get('/{id}/view', [PegawaiController::class, 'view'])->name('pegawai.view');
+    
 });
 
-route::prefix('categories')->group(function (){
+Route::prefix('categories')->group(function (){
     Route::get('/', [CategoriesController::class, 'index'])->name('categories.index');
     Route::get('/create', [CategoriesController::class, 'create'])->name('categories.create');
     Route::post('/categories/store', [CategoriesController::class, 'store'])->name('categories.store');
@@ -71,6 +77,6 @@ route::prefix('peminjaman')->group(function (){
     Route::get('/peminjaman/{id}/edit', [App\Http\Controllers\Master\PeminjamanController::class, 'edit'])->name('peminjaman.edit');
     Route::put('/peminjaman/{id}', [App\Http\Controllers\Master\PeminjamanController::class, 'update'])->name('peminjaman.update');
     Route::delete('/peminjaman/{id}', [App\Http\Controllers\Master\PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
+    Route::get('/peminjaman/{id}/cetak', [PeminjamanController::class, 'cetak'])->name('peminjaman.cetak');
 });
 
-route::get('/view', [App\Http\Controllers\ViewController::class, 'index'])->name('view');

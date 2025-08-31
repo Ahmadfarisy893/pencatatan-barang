@@ -26,14 +26,13 @@
     @endphp
 
     <h2>BERITA ACARA SERAH TERIMA BARANG</h2>
-    <p class="nomor">Nomor: {{ $loan->nomor_dokumen ?? '—' }}</p>
 
     <p>Pada hari ini, {{ $hari }}, tanggal {{ $tanggal }}, bertempat di {{ config('app.name') }}, kami yang bertanda tangan di bawah ini:</p>
 
     <ol>
         <li>
-            Nama : <b>{{ $loan->petugas_nama ?? '................................' }}</b><br>
-            NIP  : {{ $loan->petugas_nip ?? '................................' }}<br>
+            Nama : <br>
+            NIP  : <br>
             (Selanjutnya disebut <b>PIHAK PERTAMA</b>)
         </li>
         <br>
@@ -74,6 +73,7 @@
     <br>
     <br>
     <br>
+    <br>
     <table width="100%" class="ttd">
     <tr>
         <td width="50%" align="center">PIHAK PERTAMA</td>
@@ -85,8 +85,8 @@
     </tr>
     <tr>
         <td align="center">
-            <b>{{ $loan->petugas_nama ?? '(Nama & NIP Petugas)' }}</b><br>
-            NIP. {{ $loan->petugas_nip ?? '................' }}
+            <b>Nama</b><br>
+            NIP.
         </td>
         <td align="center">
             <b>{{ $loan->nama_pegawai }}</b><br>

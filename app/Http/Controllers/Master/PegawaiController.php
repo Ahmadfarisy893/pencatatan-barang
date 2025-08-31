@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Pegawai;
 use App\Models\Barang;
 use App\Models\Peminjaman;
-
+use Vinkla\Hashids\Facades\Hashids;
 
 class PegawaiController extends Controller
 {
@@ -28,13 +28,15 @@ class PegawaiController extends Controller
             'nama' => 'required|string|max:100',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'status_kerja' => 'required|in:Aktif,Pensiun,Mengundurkan Diri',
+            'foto' => 'image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
-        
-        Pegawai::create([
+
+        $pegawai = Pegawai::create([
             'nip' => $request->nip,
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'status_kerja' => $request->status_kerja ?? 'Aktif', // Default status kerja jika tidak diisi
+            'status_kerja' => $request->status_kerja ?? 'Aktif',
+            'foto' => $request->file('foto')->store('foto', 'public'),
         ]);
         return redirect()->route('pegawai.index')->with('success', 'Data berhasil ditambahkan.');
     }
@@ -71,7 +73,14 @@ class PegawaiController extends Controller
     }
     public function view($id)
     {
-    $pegawai = Pegawai::findOrFail($id);
+    $decoded = Hashids::decode($id);
+
+    if (empty($decoded)) {
+        abort(404, 'ID tidak valid'); // kalau id hasil decode kosong
+    }
+
+    $pegawaiId = $decoded[0]; // ambil id asli
+    $pegawai = Pegawai::findOrFail($pegawaiId);
 
     // Ambil daftar peminjaman untuk pegawai ini
     $peminjaman = Peminjaman::with('barang.category')

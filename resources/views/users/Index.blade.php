@@ -7,7 +7,7 @@
     <h1>Data User</h1> <!-- Ubah judul -->
     <div class="d-flex justify-content-between align-items-center mt-5 mb-3 gap-8">
         <input class="form-control" id="myInput" type="text" placeholder="Search..">
-        <a href="" class="btn btn-primary d-flex align-items-center" style="height: 50px;">
+        <a href="{{ route('users.create') }}" class="btn btn-primary d-flex align-items-center" style="height: 50px;">
             <i class="fas fa-plus me-2"></i> Tambah User
         </a>
     </div>
@@ -44,7 +44,7 @@
                     <td>{{ $user->created_at->format('d M Y H:i') }}</td>
                     <td>{{ $user->updated_at->format('d M Y H:i') }}</td>
                     <td class="d-flex justify-content-center gap-2">
-                        <a href="#" class="btn btn-sm btn-warning rounded-pill">
+                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning rounded-pill">
                             Update
                         </a>
                     </td>
