@@ -9,7 +9,7 @@
                     <h4 class="text-gray-900">Edit Barang</h4>
                 </div>
 
-                <form action="{{ route('barang.update', $barang->id) }}" method="POST" class="user">
+                <form action="{{ route('barang.update', $barang->id) }}" method="POST" class="user" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -46,7 +46,26 @@
                         <input type="text" name="kode_barang" class="form-control form-control-user"
                                placeholder="Masukkan kode barang" value="{{ old('kode_barang', $barang->kode_barang) }}" required>
                     </div>
-
+                    <div class="mb-3">
+                            <label for="formFile" class="form-label">Update Foto Barang</label>
+                            <input 
+                                class="form-control" 
+                                type="file" 
+                                id="formFile" 
+                                name="foto" 
+                                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                                onchange="previewImage(event)" 
+                            />
+    
+                            {{-- Preview foto lama --}}
+                            <div class="mt-3 text-center">
+                                @if($barang->foto)
+                                    <img id="preview" src="{{ asset('image/barang/' . $barang->foto) }}" alt="Foto Barang" class="img-thumbnail" width="200">
+                                @else
+                                    <img id="preview" src="#" alt="Preview Foto" class="img-thumbnail d-none" width="200">
+                                @endif
+                            </div>
+                        </div>
                     <div class="form-group mb-3">
                         <label for="jumlah" class="block font-medium mb-1">Jumlah</label>
                         <input type="number" name="jumlah" class="form-control form-control-user"
@@ -75,4 +94,29 @@
         </div>
     </div>
 </div>
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+
+            if (!allowedTypes.includes(file.type)) {
+                alert("Hanya file gambar (JPG, PNG, GIF, WEBP) yang diperbolehkan!");
+                input.value = ""; // reset input file
+                preview.classList.add('d-none');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @endsection

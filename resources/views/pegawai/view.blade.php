@@ -10,7 +10,7 @@
           <h5 class=" fs-4">Profile Details</h5>
           <div class="d-flex align-items-start align-items-sm-center gap-2">
             <img
-              src="{{ $pegawai->foto ? asset('storage/'.$pegawai->foto) : asset('sneat/assets/img/avatars/1.png') }}"
+              src="{{ asset('image/pegawai/' . $pegawai->foto) }}"
               alt="user-avatar"
               class="d-block rounded"
               height="100"

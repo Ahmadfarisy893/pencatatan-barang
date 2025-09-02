@@ -26,6 +26,7 @@
                 <th>Jumlah</th>
                 <th>Kondisi</th>
                 <th>Action</th>
+                <th>view</th>
             </tr>
         </thead>
         <tbody id="myTable">
@@ -53,13 +54,16 @@
                         <a href="{{ route('barang.edit', $barang->id) }}" class="btn btn-sm btn-warning rounded-pill">
                             Update
                         </a>
-                        <form action="{{ route('barang.destroy', $barang->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?');">
+                        <!--<form action="{{ route('barang.destroy', $barang->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger rounded-pill">
                                 Hapus
                             </button>
-                        </form>
+                        </form> -->
+                    </td>
+                    <td>
+                        <a href="{{ route('barang.view',  Hashids::encode($barang->id)) }}" class="btn btn-sm btn-info rounded-pill">View</a>
                     </td>
                 </tr>
             @empty

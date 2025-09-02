@@ -8,7 +8,7 @@
                 <div class="text-center mb-4">
                     <h4>Edit Data Pegawai</h4>
                 </div>
-                <form action="{{ route('pegawai.update', $pegawai->id) }}" method="POST" class="user mt-4">
+                <form action="{{ route('pegawai.update', $pegawai->id) }}" method="POST" class="user mt-4" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="form-group mb-3">
@@ -20,7 +20,26 @@
                             <label for="nama">Nama</label>
                             <input type="text" name="nama" class="form-control" value="{{ $pegawai->nama }}" required>
                         </div>
-
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Update Foto Pegawai</label>
+                            <input 
+                                class="form-control" 
+                                type="file" 
+                                id="formFile" 
+                                name="foto" 
+                                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                                onchange="previewImage(event)" 
+                            />
+    
+                            {{-- Preview foto lama --}}
+                            <div class="mt-3 text-center">
+                                @if($pegawai->foto)
+                                    <img id="preview" src="{{ asset('image/pegawai/' . $pegawai->foto) }}" alt="Foto Pegawai" class="img-thumbnail" width="200">
+                                @else
+                                    <img id="preview" src="#" alt="Preview Foto" class="img-thumbnail d-none" width="200">
+                                @endif
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="jenis_kelamin">Jenis Kelamin</label>
                             <select name="jenis_kelamin" id="jenis_kelamin" class="form-control" required>
@@ -53,4 +72,30 @@
         </div>
     </div>           
 </div>
+{{-- Script untuk preview gambar --}}
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+
+            if (!allowedTypes.includes(file.type)) {
+                alert("Hanya file gambar (JPG, PNG, GIF, WEBP) yang diperbolehkan!");
+                input.value = ""; // reset input file
+                preview.classList.add('d-none');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @endsection

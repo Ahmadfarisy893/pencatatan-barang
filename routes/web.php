@@ -38,17 +38,17 @@ Route::middleware(['auth', 'cekrole:Super Admin'])->group(function () {
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/{id}/view', [BarangController::class, 'view'])->name('barang.view');
 });
 
 Route::prefix('pegawai')->group(function () {
     Route::get('/', [PegawaiController::class, 'index'])->name('pegawai.index');
     Route::get('/create', [PegawaiController::class, 'create'])->name('pegawai.create');
     Route::post('/pegawai/store', [PegawaiController::class, 'store'])->name('pegawai.store');
-    Route::get('/pegawai/{id}/edit', [App\Http\Controllers\Master\PegawaiController::class, 'edit'])->name('pegawai.edit');
+    Route::get('/{id}/edit', [App\Http\Controllers\Master\PegawaiController::class, 'edit'])->name('pegawai.edit');
     Route::put('/pegawai/{id}', [App\Http\Controllers\Master\PegawaiController::class, 'update'])->name('pegawai.update');
     Route::delete('/pegawai/{id}', [App\Http\Controllers\Master\PegawaiController::class, 'destroy'])->name('pegawai.destroy');
     Route::get('/{id}/view', [PegawaiController::class, 'view'])->name('pegawai.view');
-    
 });
 
 Route::prefix('categories')->group(function (){
@@ -67,6 +67,7 @@ route::prefix('barang')->group(function (){
     Route::get('/barang/{id}/edit', [App\Http\Controllers\Master\barangController::class, 'edit'])->name('barang.edit');
     Route::put('/barang/{id}', [App\Http\Controllers\Master\barangController::class, 'update'])->name('barang.update');
     Route::delete('/barang/{id}', [App\Http\Controllers\Master\barangController::class, 'destroy'])->name('barang.destroy');
+    Route::get('/{id}/view', [BarangController::class, 'view'])->name('barang.view');
 });
 
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\barang;
 use App\Models\categories;
+use Vinkla\Hashids\Facades\Hashids;
 
 class BarangController extends Controller
 {
@@ -28,7 +29,19 @@ class BarangController extends Controller
             'kode_barang'   => 'required|string|max:100|unique:barang,kode_barang',
             'jumlah'        => 'required|integer|min:0',
             'kondisi'       => 'required|string|in:baik,rusak,perlu perbaikan',
+            'foto'          => 'image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
+        // cek apakah ada upload foto
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // simpan di public/image/barang
+            $file->move(public_path('image/barang'), $filename);
+
+            // masukkan nama file ke array validated
+            $validated['foto'] = $filename;
+        }
 
         Barang::create($validated);
 
@@ -52,7 +65,20 @@ class BarangController extends Controller
             'kode_barang'   => 'required|string|max:100|unique:barang,kode_barang,' . $barang->id,
             'jumlah'        => 'required|integer|min:0',
             'kondisi'       => 'required|string|in:baik,rusak,perlu perbaikan',
+            'foto'          => 'image|mimes:jpg,jpeg,png,gif,webp|max:2048',
         ]);
+
+        // cek apakah ada upload foto
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // simpan di public/image/barang
+            $file->move(public_path('image/barang'), $filename);
+
+            // masukkan nama file ke array validated
+            $validated['foto'] = $filename;
+        }
 
         $barang->update($validated);
 
@@ -65,4 +91,18 @@ class BarangController extends Controller
         $barang->delete();
         return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus.');
     }    
+
+    public function view($id)
+    {
+    $decoded = Hashids::decode($id);
+
+    if (empty($decoded)) {
+        abort(404, 'ID tidak valid'); // kalau id hasil decode kosong
+    }
+
+    $barangId = $decoded[0]; // ambil id asli
+    $barang = Barang::with(['peminjaman.pegawai'])->findOrFail($barangId);
+
+    return view('barang.view', compact('barang'));
+    }
 }
