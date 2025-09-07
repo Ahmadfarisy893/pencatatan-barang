@@ -31,25 +31,59 @@
 
                     <div class="form-group mb-3">
                         <label for="nama_pegawai" class="block font-medium mb-1">Nama Pegawai</label>
-                        <input type="text" name="nama_pegawai" class="form-control form-control-user"
-                               value="{{ old('nama_pegawai', $peminjaman->nama_pegawai) }}" required>
+                        <select name="nama_pegawai" id="nama_pegawai" class="form-control form-control-user" required>
+                            <option value="">-- Pilih Pegawai --</option>
+                            @foreach($pegawais as $p)
+                                <option value="{{ $p->nama }}" 
+                                        data-nip="{{ $p->nip }}" 
+                                        data-foto="{{ $p->foto }}"
+                                        {{ old('nama_pegawai', $peminjaman->nama_pegawai) == $p->nama ? 'selected' : '' }}>
+                                    {{ $p->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        {{-- Hidden input untuk simpan foto --}}
+                        <input type="hidden" name="foto_pegawai" id="foto_pegawai" value="{{ old('foto_pegawai', $peminjaman->foto_pegawai) }}">
+
+                        {{-- Preview foto pegawai --}}
+                        <div class="mt-2">
+                            <img id="previewPegawai" 
+                                src="{{ $peminjaman->foto_pegawai ? asset('image/pegawai/'.$peminjaman->foto_pegawai) : asset('sneat/assets/img/avatars/1.png') }}" 
+                                alt="Foto Pegawai" 
+                                class="rounded" 
+                                width="100" height="100"
+                                style="object-fit:cover;">
+                        </div>
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="barang_id" class="block font-medium mb-1">Barang</label>
-                        <select name="barang_id" class="form-control form-control-user" required>
+                        <select name="barang_id" id="barang_id" class="form-control form-control-user" required>
                             <option value="">-- Pilih Barang --</option>
                             @foreach($barangs as $b)
-                                <option value="{{ $b->id }}"
-                                    {{ old('barang_id', $peminjaman->barang_id) == $b->id ? 'selected' : '' }}>
-                                    {{ $b->nama_barang }} ({{ optional($b->category)->name }}) — Stok: {{ $b->jumlah + ($peminjaman->barang_id == $b->id ? $peminjaman->jumlah : 0) }}
+                                <option value="{{ $b->id }}" 
+                                        data-foto="{{ $b->foto }}"
+                                        {{ old('barang_id', $peminjaman->barang_id) == $b->id ? 'selected' : '' }}>
+                                    {{ $b->nama_barang }} ({{ optional($b->category)->name }}) — 
+                                    Stok: {{ $b->jumlah + ($peminjaman->barang_id == $b->id ? $peminjaman->jumlah : 0) }}
                                 </option>
                             @endforeach
                         </select>
-                        <small class="text-muted">
-                            *Stok ditampilkan termasuk pengembalian dari peminjaman saat ini agar tidak salah tarik.
-                        </small>
+                        {{-- Hidden input untuk simpan foto barang --}}
+                        <input type="hidden" name="foto_barang" id="foto_barang" value="{{ old('foto_barang', $peminjaman->foto_barang) }}">
+
+                        {{-- Preview foto barang --}}
+                        <div class="mt-2">
+                            <img id="previewBarang" 
+                                 src="{{ $peminjaman->foto_barang ? asset('image/barang/'.$peminjaman->foto_barang) : asset('sneat/assets/img/avatars/1.png') }}" 
+                                 alt="Foto Barang" 
+                                 class="rounded" 
+                                 width="100" height="100"
+                                 style="object-fit:cover;">
+                        </div>
                     </div>
+
 
                     <div class="form-group mb-3">
                         <label for="jumlah" class="block font-medium mb-1">Jumlah</label>
@@ -76,4 +110,42 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const pegawaiSelect = document.getElementById('nama_pegawai');
+    const fotoPegawaiInput = document.getElementById('foto_pegawai');
+    const previewPegawai = document.getElementById('previewPegawai');
+
+    const barangSelect = document.getElementById('barang_id');
+    const fotoBarangInput = document.getElementById('foto_barang');
+    const previewBarang = document.getElementById('previewBarang');
+
+    // Pegawai
+    pegawaiSelect.addEventListener('change', function() {
+        const selected = this.options[this.selectedIndex];
+        const foto = selected.getAttribute('data-foto');
+        fotoPegawaiInput.value = foto;
+        if (foto) {
+            previewPegawai.src = `/image/pegawai/${foto}`;
+        } else {
+            previewPegawai.src = `/sneat/assets/img/avatars/1.png`;
+        }
+    });
+
+    // Barang
+    barangSelect.addEventListener('change', function() {
+        const selected = this.options[this.selectedIndex];
+        const foto = selected.getAttribute('data-foto');
+        fotoBarangInput.value = foto;
+        if (foto) {
+            previewBarang.src = `/image/barang/${foto}`;
+        } else {
+            previewBarang.src = `/sneat/assets/img/avatars/1.png`;
+        }
+    });
+});
+</script>
+
+
 @endsection

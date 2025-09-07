@@ -37,10 +37,11 @@
     <div class="row g-0 align-items-center">
       <div class="col-md-3">
         <img class="card-img"
-             src="{{ asset('sneat/assets/img/elements/12.jpg') }}"
-             alt="Gambar Barang"
-             height="200"
-             style="object-fit: cover;" />
+            src="{{ asset('image/barang/' . $loan->foto_barang) }}"
+            alt="Gambar Barang"
+            class="d-block rounded"
+            height="200"
+            width="100">
       </div>
       <div class="col-md-9">
         <div class="card-body">

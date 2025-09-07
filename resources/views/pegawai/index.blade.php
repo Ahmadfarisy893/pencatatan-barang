@@ -34,7 +34,22 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->nip }}</td>
-                    <td>{{ $item->nama }}</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                <li
+                                data-bs-toggle="tooltip"
+                                data-popup="tooltip-custom"
+                                data-bs-placement="top"
+                                class="avatar avatar-xs pull-up"
+                                title="{{ $item->nama }}"
+                                >
+                              <img src="{{ asset('image/pegawai/' . $item->foto) }}" alt="Avatar" class="rounded-circle" height="24" width="24" />
+                                </li>
+                            </ul>
+                            {{ $item->nama }}
+                        </div>
+                    </td>
                     <td>{{ $item->jenis_kelamin }}</td>
                     <td>
                         @php
@@ -230,7 +245,6 @@ $(function(){
     renderPagination(allRows);
 });
 </script>
-
 
 </div>
 @endsection

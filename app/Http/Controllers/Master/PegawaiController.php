@@ -24,30 +24,32 @@ class PegawaiController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nip' => 'required|string|unique:pegawai,nip|max:20',
-            'nama' => 'required|string|max:100',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'status_kerja' => 'required|in:Aktif,Pensiun,Mengundurkan Diri',
-            'foto' => 'image|mimes:jpg,jpeg,png,gif,webp|max:2048',
-        ]);
+    $request->validate([
+        'nip' => 'required|string|unique:pegawai,nip|max:20',
+        'nama' => 'required|string|max:100',
+        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+        'status_kerja' => 'required|in:Aktif,Pensiun,Mengundurkan Diri',
+        'foto' => 'image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+    ]);
 
-        // cek apakah ada foto
-        if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-
-        // simpan di public/image/pegawai
+    $filename = null;
+    if ($request->hasFile('foto')) {
+        $file = $request->file('foto');
+        $filename = time() . '_' . $file->getClientOriginalName();
         $file->move(public_path('image/pegawai'), $filename);
-
-        // simpan nama file ke database
-        $pegawai->foto = $filename;
-        }
-
-        $pegawai->save();
-        return redirect()->route('pegawai.index')->with('success', 'Data berhasil ditambahkan.');
     }
-    
+
+    Pegawai::create([
+        'nip'          => $request->nip,
+        'nama'         => $request->nama,
+        'jenis_kelamin'=> $request->jenis_kelamin,
+        'status_kerja' => $request->status_kerja,
+        'foto'         => $filename,
+    ]);
+
+    return redirect()->route('pegawai.index')->with('success', 'Data berhasil ditambahkan.');
+    }
+
     public function edit($id)
     {
         $pegawai = Pegawai::findOrFail($id);
@@ -56,15 +58,21 @@ class PegawaiController extends Controller
 
     public function update(Request $request, $id)
     {
+     $request->validate([
+        'nip' => 'required|string|max:20|unique:pegawai,nip,' . $id,
+        'nama' => 'required|string|max:100',
+        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+        'status_kerja' => 'required|in:Aktif,Pensiun,Mengundurkan Diri',
+        'foto' => 'image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+    ]);
+
     $pegawai = Pegawai::findOrFail($id);
 
-    $pegawai->nip = $request->nip;
-    $pegawai->nama = $request->nama;
-    $pegawai->jenis_kelamin = $request->jenis_kelamin;
-    $pegawai->status_kerja = $request->status_kerja;
+    // Simpan Foto lama atau Simpan nama foto lama
+    $filename = $pegawai->foto;
 
     if ($request->hasFile('foto')) {
-        // hapus foto lama kalau ada
+        // Menghapus foto lama (jika ada), jika tidak 
         if ($pegawai->foto && file_exists(public_path('image/pegawai/' . $pegawai->foto))) {
             unlink(public_path('image/pegawai/' . $pegawai->foto));
         }
@@ -72,11 +80,16 @@ class PegawaiController extends Controller
         $file = $request->file('foto');
         $filename = time() . '_' . $file->getClientOriginalName();
         $file->move(public_path('image/pegawai'), $filename);
-
-        $pegawai->foto = $filename;
     }
 
-    $pegawai->save();
+    // Update semua field
+    $pegawai->update([
+        'nip'          => $request->nip,
+        'nama'         => $request->nama,
+        'jenis_kelamin'=> $request->jenis_kelamin,
+        'status_kerja' => $request->status_kerja,
+        'foto'         => $filename,
+    ]);
 
     return redirect()->route('pegawai.index')->with('success', 'Data pegawai berhasil diupdate');
     }

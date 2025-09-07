@@ -9,7 +9,7 @@
                     <h4 class="text-gray-900">Tambah Peminjaman Barang</h4>
                 </div>
 
-                <form action="{{ route('peminjaman.store') }}" method="POST" class="user">
+                <form action="{{ route('peminjaman.store') }}" method="POST" class="user" enctype="multipart/form-data">
                     @csrf
 
                     @if($errors->any())
@@ -27,7 +27,7 @@
                         <select name="nama_pegawai" id="nama_pegawai" class="form-control form-control-user" required>
                             <option value="">-- Pilih Pegawai --</option>
                             @foreach($pegawais as $p)
-                                <option value="{{ $p->nama }}" data-nip="{{ $p->nip }}" {{ old('nama_pegawai') == $p->nama ? 'selected' : '' }}>
+                                <option value="{{ $p->nama }}" data-nip="{{ $p->nip }}" data-foto="{{ $p->foto }}" {{ old('nama_pegawai') == $p->nama ? 'selected' : '' }}>
                                     {{ $p->nama }} 
                                 </option>
                             @endforeach
@@ -41,15 +41,27 @@
                     </div>
 
                     <div class="form-group mb-3">
+                        <label class="block font-medium mb-1">Foto Pegawai</label><br>
+                        <img id="preview_foto" src="" alt="Foto Pegawai" style="max-height:120px; display:none;" class="rounded shadow">
+                        <input type="hidden" name="foto_pegawai" id="foto_pegawai" value="{{ old('foto_pegawai') }}">
+                    </div>
+
+                    <div class="form-group mb-3">
                         <label for="barang_id" class="block font-medium mb-1">Barang</label>
-                        <select name="barang_id" class="form-control form-control-user" required>
+                        <select name="barang_id" id="barang_id" class="form-control form-control-user" required>
                             <option value="">-- Pilih Barang --</option>
                             @foreach($barangs as $b)
-                                <option value="{{ $b->id }}" {{ old('barang_id') == $b->id ? 'selected' : '' }}>
+                                <option value="{{ $b->id }}" data-foto="{{ $b->foto }}" {{ old('barang_id') == $b->id ? 'selected' : '' }}>
                                     {{ $b->nama_barang }} ({{ optional($b->category)->name }}) — Stok: {{ $b->jumlah }}
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="block font-medium mb-1">Foto barang</label><br>
+                        <img id="preview_foto_barang" src="" alt="Foto barang" style="max-height:120px; display:none;" class="rounded shadow">
+                        <input type="hidden" name="foto_barang" id="foto_barang" value="{{ old('foto_barang') }}">
                     </div>
 
                     <div class="form-group mb-3">
@@ -77,18 +89,49 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const namaSelect = document.getElementById('nama_pegawai');
-        const nipInput = document.getElementById('nip');
+document.addEventListener("DOMContentLoaded", function () {
+    // === Pegawai ===
+    const selectPegawai = document.getElementById("nama_pegawai");
+    const nipField = document.getElementById("nip");
+    const fotoPegawaiField = document.getElementById("foto_pegawai");
+    const previewFotoPegawai = document.getElementById("preview_foto");
 
-        namaSelect.addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            const nip = selectedOption.getAttribute('data-nip') || '';
-            nipInput.value = nip;
-        });
+    selectPegawai.addEventListener("change", function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const nip = selectedOption.getAttribute("data-nip");
+        const foto = selectedOption.getAttribute("data-foto");
 
-        // Trigger change event once on load to fill NIP if editing
-        namaSelect.dispatchEvent(new Event('change'));
+        nipField.value = nip || "";
+        fotoPegawaiField.value = foto || "";
+
+        if (foto) {
+            previewFotoPegawai.src = "/image/pegawai/" + foto;
+            previewFotoPegawai.style.display = "block";
+        } else {
+            previewFotoPegawai.style.display = "none";
+        }
     });
+
+    // === Barang ===
+    const selectBarang = document.getElementById("barang_id");
+    const fotoBarangField = document.getElementById("foto_barang");
+    const previewFotoBarang = document.getElementById("preview_foto_barang");
+
+    selectBarang.addEventListener("change", function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const fotoBarang = selectedOption.getAttribute("data-foto");
+
+        fotoBarangField.value = fotoBarang || "";
+
+        if (fotoBarang) {
+            previewFotoBarang.src = "/image/barang/" + fotoBarang; // sesuaikan path folder
+            previewFotoBarang.style.display = "block";
+        } else {
+            previewFotoBarang.style.display = "none";
+        }
+    });
+});
 </script>
+
+
 @endsection

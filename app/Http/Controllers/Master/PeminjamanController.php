@@ -34,6 +34,8 @@ class PeminjamanController extends Controller
             'barang_id'         => 'required|exists:barang,id',
             'jumlah'            => 'required|integer|min:1',
             'tanggal_pemberian' => 'required|date',
+            'foto_pegawai'      => 'nullable|string|max:255',
+            'foto_barang'       => 'nullable|string|max:255',
         ]);
 
         $barang = Barang::findOrFail($validated['barang_id']);
@@ -51,7 +53,8 @@ class PeminjamanController extends Controller
     {
         $peminjaman = Peminjaman::findOrFail($id);
         $barangs = Barang::with('category')->orderBy('nama_barang')->get();
-        return view('peminjaman.edit', compact('peminjaman', 'barangs'));
+        $pegawais = Pegawai::all();
+        return view('peminjaman.edit', compact('peminjaman', 'barangs', 'pegawais'));
     }
 
     public function update(Request $request, $id)
@@ -64,6 +67,8 @@ class PeminjamanController extends Controller
             'barang_id'         => 'required|exists:barang,id',
             'jumlah'            => 'required|integer|min:1',
             'tanggal_pemberian' => 'required|date',
+            'foto_pegawai'      => 'nullable|string|max:255',
+            'foto_barang'       => 'nullable|string|max:255',
         ]);
 
         // kembalikan stok lama

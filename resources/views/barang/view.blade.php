@@ -52,7 +52,7 @@
       <div class="row g-0 align-items-center">
         <div class="col-md-3">
           <img class="card-img"
-               src=""
+               src="{{ asset('image/pegawai/' . $loan->foto_pegawai) }}"
                alt="Foto Pegawai"
                height="200"
                style="object-fit: cover;" />

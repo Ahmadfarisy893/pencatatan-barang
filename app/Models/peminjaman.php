@@ -8,13 +8,15 @@ class peminjaman extends Model
 {
     protected $table = 'peminjaman';
 
-    protected $fillable = [
-        'nip',
-        'nama_pegawai',
-        'barang_id',
-        'jumlah',
-        'tanggal_pemberian',
-    ];
+        protected $fillable = [
+            'nip',
+            'nama_pegawai',
+            'barang_id',
+            'jumlah',
+            'tanggal_pemberian',
+            'foto_pegawai',
+            'foto_barang'
+        ];
 
     public function barang()
     {
