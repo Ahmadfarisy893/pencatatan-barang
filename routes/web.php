@@ -3,15 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Master\PegawaiController;
 use App\Http\Controllers\Master\CategoriesController;
 use App\Http\Controllers\Master\BarangController;
 use App\Http\Controllers\Master\PeminjamanController;
-use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\EmailController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('/dashboard');
 });
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -33,12 +33,14 @@ Route::post('auth/logout', [AuthController::class, 'logout'])->name('logout');
 // hanya Super Admin yang boleh akses users
 Route::middleware(['auth', 'cekrole:Super Admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/akun', [UserController::class, 'akun'])->name('users.akun');
+    Route::put('/akun/updateAkun', [UserController::class, 'updateAkun'])->name('users.updateAkun');
+    Route::put('/akun/updateAvatar', [UserController::class, 'updateAvatar'])->name('users.updateAvatar');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-    Route::get('/{id}/view', [BarangController::class, 'view'])->name('barang.view');
 });
 
 Route::prefix('pegawai')->group(function () {

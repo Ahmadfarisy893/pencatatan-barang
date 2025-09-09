@@ -116,17 +116,25 @@
                                 <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle gmail-badge" style="font-size: 10px;">0</span>
                             </a>
                         </li>
-                        <!-- Gmail Icon -->
 
                         <!-- Profile Dropdown -->
                         <a id="navbarDropdown" class="nav-link d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                             <span class="ms-2">{{ Auth::user()->name }}</span>
-                            <div class="bg-primary rounded d-flex align-items-center justify-content-center mx-2" style="width: 32px; height: 32px;">
+                                @if(Auth::user()->avatar)
+                            <div class="rounded-circle overflow-hidden mx-2" style="width: 32px; height: 32px;">
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                    alt="avatar"
+                                    class="w-100 h-100"
+                                    style="object-fit: cover;">
+                            </div>
+                          @else
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-2" style="width: 32px; height: 32px;">
                                 <span class="text-white fw-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
                             </div>
+                          @endif
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('users.akun') }}">
                                 <i class="fas fa-user me-2"></i>
                                 Profile
                             </a>

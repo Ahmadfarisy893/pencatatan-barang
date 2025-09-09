@@ -68,4 +68,39 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'User berhasil diupdate!');
     }
+
+    public function akun()
+    {
+        return view('users.akun');
+    }
+
+    public function updateAkun(Request $request)
+    {
+    $user = auth()->user();
+
+    $request->validate([
+        'name'  => 'required|string|max:255',
+        'nip'   => 'required|string|max:50|unique:users,nip,' . $user->id,
+        'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        'avatar'   => 'nullable|image|mimes:jpg,jpeg,png,gif|max:800',
+    ]);
+
+    $user->name = $request->name;
+    $user->nip = $request->nip;
+    $user->email = $request->email;
+
+    if ($request->hasFile('avatar')) {
+        // hapus foto lama jika ada
+         if ($user->avatar && file_exists(public_path('image/users/' . $user->avatar))) {
+            unlink(public_path('image/users/' . $user->avatar));
+        }
+
+    $path = $request->file('avatar')->store('/image/users/', 'public');
+    $user->avatar = $path;
+    }
+
+    $user->save();
+
+    return redirect()->route('users.akun')->with('success', 'Profil berhasil diperbarui!');
+    }
 }
