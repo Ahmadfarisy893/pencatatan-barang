@@ -111,7 +111,7 @@
                     <!-- User Dropdown -->
                     <li class="nav-item dropdown d-flex align-items-center">
                         <li class="nav-item d-flex align-items-center me-3">
-                            <a href="{{ url('/mail/welcome-email') }}" class="nav-link position-relative" title="Gmail">
+                            <a href="{{ route('mail.index') }}" class="nav-link position-relative" title="Gmail">
                                 <i class="fas fa-envelope text-white" style="font-size: 18px;"></i>
                                 <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle gmail-badge" style="font-size: 10px;">0</span>
                             </a>
