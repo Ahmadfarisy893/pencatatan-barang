@@ -727,13 +727,12 @@
               <div class="aside-content">
                 <div class="aside-header">
                   <button class="navbar-toggle" data-target=".aside-nav" data-toggle="collapse" type="button"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></span></button><span class="title">Mail Service</span>
-                  <a href="{{ route('mail.index') }}" class="btn btn-secondary btn-user">Kembali</a>
                 </div>
-                <div class="aside-compose"><a class="btn btn-primary btn-block" href="../../../demo_1/pages/email/compose.html">Compose Email</a></div>
+                <div class="aside-compose"><a class="btn btn-secondary btn-block" href="{{ route('mail.index') }}">Kembali</a></div>
                 <div class="aside-nav collapse">
                   <ul class="nav">
-                    <li class="active"><a href="../../../demo_1/pages/email/inbox.html"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></span>Inbox<span class="badge badge-danger-muted text-white font-weight-bold float-right">2</span></a></li>
-                    <li><a href="#"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>Sent Mail</a></li>
+                    <li class="active"><a href="{{ route('mail.index') }}"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></span>Inbox<span class="badge badge-danger-muted text-white font-weight-bold float-right">2</span></a></li>
+                    <li><a href="{{ route('mail.sendMail') }}"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>Sent Mail</a></li>
                     <li><a href="#"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></span>Trash</a></li>
                   </ul>
                   <span class="title">Labels</span>
@@ -786,13 +785,27 @@
 
     {{-- Balasan --}}
     @if($email->replies->count() > 0)
-    <div class="email-replies mt-4">
+    <div class="email-replies mt-4" >
         @foreach($email->replies as $reply)
             <hr>
-            <div class="reply mb-3">
+            <div class="reply">
                 <div class="d-flex justify-content-between align-items-center">
-                    <strong>{{ $reply->from }}</strong>
-                    <small class="text-muted">{{ $reply->created_at->format('M d, H:i') }}</small>
+                    <div class="avatar me-2 flex-wrap">
+                        <img src="{{ $reply->sender->avatar ? asset('storage/' . $reply->sender->avatar) : asset('default-avatar.png') }}"
+                             alt="Avatar" class="rounded-circle user-avatar-md" height="30px">
+                             <strong>{{ $reply->sender->email ?? $reply->from }}</strong>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <small class="text-muted mx-3">{{ $reply->created_at->format('M d, H:i') }}</small>
+                        <a href="#" class="text-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
                 <div class="mt-2">
                     {!! nl2br(e($reply->body)) !!}
@@ -801,6 +814,7 @@
         @endforeach
     </div>
     @endif
+    <hr>
     <div class="mt-3 d-flex justify-content-end align-items-center">
         <button class="btn btn-outline-dark mx-3 rounded-pill"
                 data-bs-toggle="modal" data-bs-target="#replyModal"
@@ -813,28 +827,27 @@
     </div>
 </div>
 
-        <!-- Form Balas Email -->
-        <div class="modal fade" id="replyModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content shadow-lg">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold">Reply</h5>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="{{ route('mail.send') }}">
-          @csrf
-          <input type="hidden" name="to" id="replyTo" value="">
-          <div class="form-group mb-3">
-            <textarea class="form-control" name="body" rows="6" placeholder="Write your reply..."></textarea>
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-success">Send</button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-          </div>
-        </form>
-      </div>
+<!-- Form Balas Email -->
+<div class="modal fade" id="replyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Reply</h5>
+            </div>
+        <div class="modal-body">
+            <form method="POST" action="{{ route('emails.reply', $email->id) }}">
+                @csrf
+                <input type="hidden" name="to" id="replyTo" value="">
+                <div class="form-group mb-3">
+                    <textarea class="form-control" name="body" rows="6" placeholder="Write your reply..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Send</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
 </div>
 
             </div>

@@ -19,7 +19,10 @@ Route::get('/dashboard', function () {
 
 Route::get('mail/index', [EmailController::class, 'index'])->name('mail.index');
 Route::post('mail/index', [EmailController::class, 'send'])->name('mail.send');
+Route::get('mail/sendMail', [EmailController::class, 'sendMail'])->name('mail.sendMail');
 Route::get('mail/{id}', [EmailController::class, 'show'])->name('mail.show');
+Route::post('/emails/{id}/reply', [EmailController::class, 'reply'])->name('emails.reply');
+
 
 // Google Authentication
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('login.google');

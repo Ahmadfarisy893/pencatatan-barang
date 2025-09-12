@@ -13,10 +13,7 @@
     
     <!-- Global Stylesheets Bundle -->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
-     <style>
-
-</style>
+    <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />  
 </head>
 <body>
      <div id="app" class="d-flex">

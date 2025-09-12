@@ -16,6 +16,7 @@ class EmailController extends Controller
         
         $emails = Email::where('from', $userEmail)
         ->orWhere('to', $userEmail)
+        ->whereNull('parent_id') // hanya pesan utama, exclude balasan
         ->latest()
         ->get();
         return view('mail.index', compact('emails'));
@@ -25,23 +26,24 @@ class EmailController extends Controller
     {
         $request->validate([
             'to'    => 'required|email',
+            'subject' => 'required|string|max:255',
             'body'  => 'required|string',
         ]);
         
         try {
             Mail::raw($request->body, function ($message) use ($request) {
-                $message->to($request->to)
-                ->subject('Pesan Baru dari Sistem');
-            });
+            $message->to($request->to)
+                    ->subject($request->subject); // ambil dari input form
+        });
 
             // simpan ke database
             Email::create([
                 'from'   => auth()->user()->email ?? 'admin@example.com',
                 'to'     => $request->to,
-            'subject'=> 'Pesan Baru dari Aplikasi',
-            'body'   => $request->body,
-            'avatar' => auth()->user()->avatar ? asset('storage/'.auth()->user()->avatar) : 'https://bootdey.com/img/Content/avatar/avatar1.png'
-        ]);
+                'subject'=> $request->subject,
+                'body'   => $request->body,
+                'avatar' => auth()->user()->avatar ? asset('storage/'.auth()->user()->avatar) : 'https://bootdey.com/img/Content/avatar/avatar1.png'
+            ]);
 
         return back()->with('success', 'Email berhasil dikirim!');
     } catch (\Exception $e) {
@@ -60,4 +62,35 @@ class EmailController extends Controller
         
         return view('mail.show', compact('email'));
     }
+
+    public function reply(Request $request, $id)
+    {
+    $request->validate([
+        'body' => 'required|string',
+    ]);
+
+    $parent = Email::findOrFail($id);
+    $email = Email::with(['replies.sender'])->findOrFail($id);
+
+    $reply = Email::create([
+        'from'      => auth()->id(), // atau auth()->user()->email
+        'to'        => $parent->from == auth()->id() ? $parent->to : $parent->from,
+        'subject'   => 'Re: ' . $parent->subject,
+        'body'      => $request->body,
+        'avatar'    => auth()->user()->avatar ?? null,
+        'parent_id' => $parent->id,
+    ]);
+
+    return back()->with('success', 'Balasan berhasil dikirim!');
+    }
+
+    public function sendMail()
+    {
+        $userEmail = auth()->user()->email;
+
+        $emails = Email::where('from', $userEmail)->latest()->get();
+
+        return view('mail.sendMail', compact('emails'));
+    }
+
 }
