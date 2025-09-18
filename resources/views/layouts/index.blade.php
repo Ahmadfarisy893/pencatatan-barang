@@ -19,7 +19,7 @@
     <div id="app" class="d-flex">
         <!-- Sidebar -->
         <div class="bg-primary text-white d-flex flex-column p-4  min-vh-100">
-
+            <!--- ini untuk Mobile Toggle Button -->
             <!-- App Name -->
             <div class="mb-5 text-center">
                 <h4 class="m-0 text-white" style="font-size: 20px;">{{ config('app.name', 'Laravel') }}</h4>
