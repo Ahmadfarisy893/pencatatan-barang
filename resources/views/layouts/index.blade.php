@@ -14,53 +14,12 @@
     <!-- Global Stylesheets Bundle -->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />  
-    <style>
-        /* Sidebar default */
-        #sidebar {
-            width: 250px;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        /* Untuk layar kecil, sidebar disembunyikan */
-        @media (max-width: 991px) {
-            #sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100%;
-                transform: translateX(-100%);
-                z-index: 1050;
-            }
-
-            #sidebar.active {
-                transform: translateX(0);
-            }
-
-            /* Overlay ketika sidebar muncul */
-            #overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.5);
-                z-index: 1040;
-                display: none;
-            }
-            #overlay.show {
-                display: block;
-            }
-        }
-    </style>
 </head>
 <body>
     <div id="app" class="d-flex">
         <!-- Sidebar -->
         <div class="bg-primary text-white d-flex flex-column p-4  min-vh-100">
-            <!-- Mobile Toggle Button -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+
             <!-- App Name -->
             <div class="mb-5 text-center">
                 <h4 class="m-0 text-white" style="font-size: 20px;">{{ config('app.name', 'Laravel') }}</h4>
@@ -201,18 +160,6 @@
             </main>
         </div>
     </div>
-    <script>
-        $(function(){
-            $("#sidebarToggle").on("click", function(){
-                $("#sidebar").toggleClass("active");
-                $("#overlay").toggleClass("show");
-            });
-            $("#overlay").on("click", function(){
-                $("#sidebar").removeClass("active");
-                $(this).removeClass("show");
-            });
-        });
-    </script>
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
