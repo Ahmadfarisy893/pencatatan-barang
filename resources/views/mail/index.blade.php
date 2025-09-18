@@ -739,7 +739,7 @@
                   <ul class="nav">
                     <li class="active"><a href="{{ route('mail.index') }}"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></span>Inbox<span class="badge badge-danger-muted text-white font-weight-bold float-right">2</span></a></li>
                     <li><a href="{{ route('mail.sendMail') }}"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>Sent Mail</a></li>
-                    <li><a href="#"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></span>Trash</a></li>
+                    <li><a><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></span>Trash</a></li>
                   </ul>
                   <div class="aside-compose"><a class="btn btn-secondary btn-block" href="{{ route('dashboard') }}">Kembali</a></div>
                   <span class="title">Labels</span>
@@ -767,20 +767,40 @@
                 <ul class="list-group">
                     @forelse($emails as $email)
                     <li class="list-group-item d-flex align-items-center">
-                        <img src="{{ $email->avatar ?? 'https://bootdey.com/img/Content/avatar/avatar1.png' }}"
-                            class="rounded-circle me-3"
-                            width="40"
-                            height="40"
-                            alt="Avatar">
-                        <div class="m-2">
-                            <h6 class="mb-0">{{ $email->from ?? 'Unknown' }}</h6>
-                            <small class="text-muted">{{ $email->to }}</small>
-                            <p class="mb-0 text-truncate" style="max-width: 250px;">{{ $email->body }}</p>
+                        <div class="d-flex justify-content-between align-items-center w-100">
+
+                            {{-- Kiri: Avatar + Data Pengirim (dibungkus link) --}}
+                            <a href="{{ route('mail.show', $email->id) }}" class="d-flex align-items-center text-decoration-none text-dark flex-grow-1">
+                                <img src="{{ $email->avatar ?? 'https://bootdey.com/img/Content/avatar/avatar1.png' }}"
+                                    class="rounded-circle me-3"
+                                    width="40"
+                                    height="40"
+                                    alt="Avatar">
+                                <div class="mx-2">
+                                    <h6 class="mb-0">{{ $email->from ?? 'Unknown' }}</h6>
+                                    <small class="text-muted">{{ $email->to }}</small>
+                                    <p class="mb-0 text-truncate" style="max-width: 250px;">{{ $email->body }}</p>
+                                </div>
+                            </a>
+
+                            {{-- Kanan: Tombol Hapus (terpisah, tidak kena stretched-link) --}}
+                            <form action="{{ route('mail.destroy', $email->id) }}" method="POST" onsubmit="return confirm('Yakin hapus data?')" class="text-danger border-0 bg-transparent">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-danger border-0 bg-transparent" style="outline: none; box-shadow: none;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6
+                                                 m3 0V4 a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </button>
+                            </form>
                         </div>
-                            <a href="{{ route('mail.show', $email->id) }}" class="stretched-link"></a>
                     </li>
                     @empty
-                        <li class="list-group-item text-muted">Belum ada pesan</li>
+                    <li class="list-group-item text-muted">Belum ada pesan</li>
                     @endforelse
                 </ul>
             </div>

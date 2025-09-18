@@ -22,7 +22,7 @@ Route::post('mail/index', [EmailController::class, 'send'])->name('mail.send');
 Route::get('mail/sendMail', [EmailController::class, 'sendMail'])->name('mail.sendMail');
 Route::get('mail/{id}', [EmailController::class, 'show'])->name('mail.show');
 Route::post('/emails/{id}/reply', [EmailController::class, 'reply'])->name('emails.reply');
-
+Route::delete('/mail/{id}', [EmailController::class, 'destroy'])->name('mail.destroy');
 
 // Google Authentication
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('login.google');

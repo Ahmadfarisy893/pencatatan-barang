@@ -14,154 +14,205 @@
     <!-- Global Stylesheets Bundle -->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />  
+    <style>
+        /* Sidebar default */
+        #sidebar {
+            width: 250px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Untuk layar kecil, sidebar disembunyikan */
+        @media (max-width: 991px) {
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                transform: translateX(-100%);
+                z-index: 1050;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            /* Overlay ketika sidebar muncul */
+            #overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 1040;
+                display: none;
+            }
+            #overlay.show {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
-     <div id="app" class="d-flex">
-    <!-- Sidebar -->
-    <nav class="bg-primary text-white d-flex flex-column p-4  min-vh-100">
-    <!-- App Name -->
-    <div class="mb-5 text-center">
-        <h4 class="m-0 text-white" style="font-size: 20px;">{{ config('app.name', 'Laravel') }}</h4>
-    </div>
-
-    <!-- Sidebar Menu -->
-    <ul class="nav flex-column gap-3">
-        <li class="nav-item fs-4">
-            <a class="nav-link text-white d-flex align-items-center" href="{{ url('/dashboard') }}">
-                <i class="fas fa-tachometer-alt me-3 text-white" style="width: 20px; font-size:20px;"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class="nav-item fs-4">
-            <a class="nav-link text-white d-flex align-items-center" href="{{ url('/pegawai') }}">
-                <i class="fas fa-user-plus me-3 text-white" style="width: 20px; font-size:20px;"></i>
-                <span>Tambah Pegawai</span>
-            </a>
-        </li>
-        <li class="nav-item fs-4">
-            <a class="nav-link text-white d-flex align-items-center" href="{{ url('/barang') }}">
-                <i class="fas fa-boxes me-3 text-white" style="width: 20px; font-size:20px;"></i>
-                <span>Barang</span>
-            </a>
-        </li>
-        <li class="nav-item fs-4">
-            <a class="nav-link text-white d-flex align-items-center" href="{{ url('/categories') }}">
-                <i class="fas fa-tags me-3 text-white" style="width: 20px; font-size:20px;"></i>
-                <span>Categories</span>
-            </a>
-        </li>
-        <li class="nav-item fs-4">
-            <a class="nav-link text-white d-flex align-items-center" href="{{ url('/peminjaman') }}">
-                <i class="fas fa-info-circle me-3 text-white" style="width: 20px; font-size:20px;"></i>
-                <span>Peminjaman</span>
-            </a>
-        </li>
-        {{-- menu Users hanya untuk Super Admin --}}
-         @if(Auth::user()->role === 'Super Admin')
-             <li class="nav-item fs-4">
-                 <a class="nav-link text-white d-flex align-items-center" href="{{ url('/users') }}">
-                     <i class="fas fa-users me-3 text-white"></i>
-                     <span>Users</span>
-                 </a>
-             </li>
-         @endif
-    </ul>
-</nav>
-
-
-        <!-- Main content -->
-<div class="flex-grow-1">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <!-- Dashboard Link -->
-            <a class="navbar-brand d-flex align-items-center" href="{{ url('/dashboard') }}">
-                Dashboard
-            </a>
-            
+    <div id="app" class="d-flex">
+        <!-- Sidebar -->
+        <div class="bg-primary text-white d-flex flex-column p-4  min-vh-100">
             <!-- Mobile Toggle Button -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
-            <!-- Navbar Content -->
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <!-- Guest Links -->
-                    @guest
-                        @if (Route::has('login'))
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="{{ route('login') }}">
-                                    <i class="fas fa-sign-in-alt me-2"></i>
-                                    {{ __('Login') }}
-                                </a>
-                            </li>
-                        @endif
-                        @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="{{ route('register') }}">
-                                    <i class="fas fa-user-plus me-2"></i>
-                                    {{ __('Register') }}
-                                </a>
-                            </li>
-                        @endif
-                    @else
-                    <!-- User Dropdown -->
-                    <li class="nav-item dropdown d-flex align-items-center">
-                        <li class="nav-item d-flex align-items-center me-3">
-                            <a href="{{ route('mail.index') }}" class="nav-link position-relative" title="Gmail">
-                                <i class="fas fa-envelope text-white" style="font-size: 18px;"></i>
-                                <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle gmail-badge" style="font-size: 10px;">0</span>
-                            </a>
-                        </li>
-
-                        <!-- Profile Dropdown -->
-                        <a id="navbarDropdown" class="nav-link d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                            <span class="ms-2">{{ Auth::user()->name }}</span>
-                                @if(Auth::user()->avatar)
-                            <div class="rounded-circle overflow-hidden mx-2" style="width: 32px; height: 32px;">
-                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
-                                    alt="avatar"
-                                    class="w-100 h-100"
-                                    style="object-fit: cover;">
-                            </div>
-                          @else
-                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-2" style="width: 32px; height: 32px;">
-                                <span class="text-white fw-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
-                            </div>
-                          @endif
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('users.akun') }}">
-                                <i class="fas fa-user me-2"></i>
-                                Profile
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="fas fa-cog me-2"></i>
-                                Settings
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fas fa-sign-out-alt me-2"></i>
-                                {{ __('Logout') }}
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                    @endguest
-                </ul>
+            <!-- App Name -->
+            <div class="mb-5 text-center">
+                <h4 class="m-0 text-white" style="font-size: 20px;">{{ config('app.name', 'Laravel') }}</h4>
             </div>
+
+            <!-- Sidebar Menu -->
+            <ul class="nav flex-column gap-3" id="sidebarMenu">
+                <li class="nav-item fs-4">
+                    <a class="nav-link text-white d-flex align-items-center" href="{{ url('/dashboard') }}">
+                        <i class="fas fa-tachometer-alt me-3 text-white" style="width: 20px; font-size:20px;"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item fs-4">
+                    <a class="nav-link text-white d-flex align-items-center" href="{{ url('/pegawai') }}">
+                        <i class="fas fa-user-plus me-3 text-white" style="width: 20px; font-size:20px;"></i>
+                        <span>Tambah Pegawai</span>
+                    </a>
+                </li>
+                <li class="nav-item fs-4">
+                    <a class="nav-link text-white d-flex align-items-center" href="{{ url('/barang') }}">
+                        <i class="fas fa-boxes me-3 text-white" style="width: 20px; font-size:20px;"></i>
+                        <span>Barang</span>
+                    </a>
+                </li>
+                <li class="nav-item fs-4">
+                    <a class="nav-link text-white d-flex align-items-center" href="{{ url('/categories') }}">
+                        <i class="fas fa-tags me-3 text-white" style="width: 20px; font-size:20px;"></i>
+                        <span>Categories</span>
+                    </a>
+                </li>
+                <li class="nav-item fs-4">
+                    <a class="nav-link text-white d-flex align-items-center" href="{{ url('/peminjaman') }}">
+                        <i class="fas fa-info-circle me-3 text-white" style="width: 20px; font-size:20px;"></i>
+                        <span>Peminjaman</span>
+                    </a>
+                </li>
+                {{-- menu Users hanya untuk Super Admin --}}
+                 @if(Auth::user()->role === 'Super Admin')
+                     <li class="nav-item fs-4">
+                         <a class="nav-link text-white d-flex align-items-center" href="{{ url('/users') }}">
+                             <i class="fas fa-users me-3 text-white"></i>
+                             <span>Users</span>
+                         </a>
+                     </li>
+                 @endif
+            </ul>
         </div>
-    </nav>
-        <main class="py-4 px-4">
-            @yield('content')
-        </main>
+        <!-- End Sidebar -->
+        <!-- Main content -->
+        <div class="flex-grow-1">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    
+                    <!-- Dashboard Link -->
+                    <a class="navbar-brand d-flex align-items-center" href="{{ url('/dashboard') }}">
+                        Dashboard
+                    </a>
+                    
+                    <!-- Mobile Toggle Button -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Navbar Content -->
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item d-flex align-items-center me-3">
+                                <a href="{{ route('mail.index') }}" class="nav-link position-relative" title="Gmail">
+                                    <i class="fas fa-envelope text-white" style="font-size: 18px;"></i>
+                                    <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle gmail-badge" style="font-size: 10px;">0</span>
+                                </a>
+                            </li>
+                        <!-- Guest Links -->
+                        @guest
+                                @if (Route::has('login'))
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center" href="{{ route('login') }}">
+                                            <i class="fas fa-sign-in-alt me-2"></i>
+                                            {{ __('Login') }}
+                                        </a>
+                                    </li>
+                                @endif
+                                @if (Route::has('register'))
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center" href="{{ route('register') }}">
+                                            <i class="fas fa-user-plus me-2"></i>
+                                            {{ __('Register') }}
+                                        </a>
+                                    </li>
+                                @endif
+                            @else
+                            <!-- User Dropdown -->
+                                <li class="nav-item dropdown d-flex align-items-center">
+                                        <!-- Profile Dropdown -->
+                                        <a id="navbarDropdown" class="nav-link d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                            <span class="ms-2">{{ Auth::user()->name }}</span>
+                                                @if(Auth::user()->avatar)
+                                            <div class="rounded-circle overflow-hidden mx-2" style="width: 32px; height: 32px;">
+                                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                                    alt="avatar"
+                                                    class="w-100 h-100"
+                                                    style="object-fit: cover;">
+                                            </div>
+                                          @else
+                                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-2" style="width: 32px; height: 32px;">
+                                                <span class="text-white fw-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                            </div>
+                                          @endif
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item d-flex align-items-center" href="{{ route('users.akun') }}">
+                                                <i class="fas fa-user me-2"></i>
+                                                Profile
+                                            </a>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <i class="fas fa-cog me-2"></i>
+                                                Settings
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}"
+                                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                <i class="fas fa-sign-out-alt me-2"></i>
+                                                {{ __('Logout') }}
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </div>
+                                </li>
+                        @endguest
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <main class="py-4 px-4">
+                @yield('content')
+            </main>
+        </div>
     </div>
-
-</div>
-
+    <script>
+        $(function(){
+            $("#sidebarToggle").on("click", function(){
+                $("#sidebar").toggleClass("active");
+                $("#overlay").toggleClass("show");
+            });
+            $("#overlay").on("click", function(){
+                $("#sidebar").removeClass("active");
+                $(this).removeClass("show");
+            });
+        });
+    </script>
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

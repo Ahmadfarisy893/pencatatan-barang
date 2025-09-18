@@ -795,17 +795,19 @@
                              alt="Avatar" class="rounded-circle user-avatar-md" height="30px">
                              <strong>{{ $reply->sender->email ?? $reply->from }}</strong>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <small class="text-muted mx-3">{{ $reply->created_at->format('M d, H:i') }}</small>
-                        <a href="#" class="text-danger">
+                    <form action="{{ route('mail.destroy', $reply->id) }}" method="POST" onsubmit="return confirm('Yakin hapus data?')" class="text-danger border-0 bg-transparent">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-danger border-0 bg-transparent" style="outline: none; box-shadow: none;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
                                 <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6
+                                         m3 0V4 a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                             </svg>
-                        </a>
-                    </div>
+                        </button>
+                    </form>
                 </div>
                 <div class="mt-2">
                     {!! nl2br(e($reply->body)) !!}

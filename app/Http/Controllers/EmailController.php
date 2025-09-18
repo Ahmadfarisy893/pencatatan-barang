@@ -93,4 +93,25 @@ class EmailController extends Controller
         return view('mail.sendMail', compact('emails'));
     }
 
+    public function destroy(Request $request, $id)
+    {
+        $email = Email::findOrFail($id);
+        $userEmail = auth()->user()->email;
+
+        if ($email->from !== $userEmail && $email->to !== $userEmail) {
+            abort(403, 'Akses ditolak');
+        }
+        
+        $email->delete();
+
+        if ($email->parent_id) {
+            // kalau balasan, kembali ke halaman detail email induk
+            return redirect()->route('mail.show', $email->parent_id)
+                ->with('success', 'Balasan berhasil dihapus.');
+        }
+
+        return redirect()->route('mail.index')->with('success', 'Email berhasil dihapus.');
+
+    }
+    
 }
