@@ -9,12 +9,9 @@ use App\Models\barang;
 use App\Models\pegawai;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-
-
-
 class PeminjamanController extends Controller
 {
-     public function index()
+    public function index()
     {
         $peminjamans = Peminjaman::with(['barang.category'])->orderBy('created_at', 'desc')->get();
         return view('peminjaman.index', compact('peminjamans'));

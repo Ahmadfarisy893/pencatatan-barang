@@ -9,13 +9,10 @@ use App\Http\Controllers\Master\CategoriesController;
 use App\Http\Controllers\Master\BarangController;
 use App\Http\Controllers\Master\PeminjamanController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\DashController;
 
-Route::get('/', function () {
-    return view('/dashboard');
-});
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/', [DashController::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboard', [DashController::class, 'dashboard'])->name('dashboard');
 
 Route::get('mail/index', [EmailController::class, 'index'])->name('mail.index');
 Route::post('mail/index', [EmailController::class, 'send'])->name('mail.send');

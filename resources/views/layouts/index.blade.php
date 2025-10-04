@@ -14,12 +14,57 @@
     <!-- Global Stylesheets Bundle -->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />  
+    <style>
+
+        /* Mobile mode: sembunyikan teks */
+            @media (max-width: 768px) {
+            /* perkecil lebar sidebar */
+                #app > .bg-primary {
+                    width: 70px !important;
+                    padding: 1rem 0.5rem; /* biar lebih rapat */
+                }
+                
+                #sidebarMenu {
+                    gap: 1.5rem !important; /* rapikan jarak antar menu */
+                    /*margin-top: 20px; biar tidak terlalu mepet ke atas */
+                }
+
+                /* sembunyikan teks di dalam sidebar */
+                #sidebarMenu .nav-link span {
+                    display: none !important;
+                }
+
+                /* center icon */
+                #sidebarMenu .nav-link {
+                    justify-content: center;
+                }
+
+                /* rapikan icon */
+                #sidebarMenu .nav-link i {
+                    margin-right: 0 !important;
+                    font-size: 22px; /* biar icon jelas */
+                }
+
+                /* app name juga disembunyikan */
+                #app .mb-5.text-center {
+                    display: none;
+                }
+
+                .dropdown-menu {
+                    position: absolute !important;
+                    inset: auto auto 0 0 !important;
+                    transform: translate3d(0, 100%, 0) !important;
+                    right: 10px;
+                }
+
+        }
+    </style>
 </head>
 <body>
     <div id="app" class="d-flex">
         <!-- Sidebar -->
         <div class="bg-primary text-white d-flex flex-column p-4  min-vh-100">
-            <!--- ini untuk Mobile Toggle Button -->
+            
             <!-- App Name -->
             <div class="mb-5 text-center">
                 <h4 class="m-0 text-white" style="font-size: 20px;">{{ config('app.name', 'Laravel') }}</h4>
@@ -71,30 +116,24 @@
         <!-- End Sidebar -->
         <!-- Main content -->
         <div class="flex-grow-1">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
                 <div class="container-fluid">
                     
                     <!-- Dashboard Link -->
                     <a class="navbar-brand d-flex align-items-center" href="{{ url('/dashboard') }}">
                         Dashboard
                     </a>
-                    
-                    <!-- Mobile Toggle Button -->
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
 
                     <!-- Navbar Content -->
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item d-flex align-items-center me-3">
+                        <ul class="navbar-nav ms-auto d-flex align-items-center flex-row">
+                            <li class="nav-item d-flex align-items-center me-3" id="email-icon">
                                 <a href="{{ route('mail.index') }}" class="nav-link position-relative" title="Gmail">
                                     <i class="fas fa-envelope text-white" style="font-size: 18px;"></i>
-                                    <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle gmail-badge" style="font-size: 10px;">0</span>
+
                                 </a>
                             </li>
-                        <!-- Guest Links -->
-                        @guest
+                            <!-- Guest Links -->
+                            @guest
                                 @if (Route::has('login'))
                                     <li class="nav-item">
                                         <a class="nav-link d-flex align-items-center" href="{{ route('login') }}">
@@ -111,24 +150,24 @@
                                         </a>
                                     </li>
                                 @endif
-                            @else
-                            <!-- User Dropdown -->
+                                @else
+                                <!-- User Dropdown -->
                                 <li class="nav-item dropdown d-flex align-items-center">
                                         <!-- Profile Dropdown -->
                                         <a id="navbarDropdown" class="nav-link d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                                             <span class="ms-2">{{ Auth::user()->name }}</span>
-                                                @if(Auth::user()->avatar)
-                                            <div class="rounded-circle overflow-hidden mx-2" style="width: 32px; height: 32px;">
-                                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
-                                                    alt="avatar"
-                                                    class="w-100 h-100"
-                                                    style="object-fit: cover;">
-                                            </div>
-                                          @else
-                                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-2" style="width: 32px; height: 32px;">
-                                                <span class="text-white fw-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
-                                            </div>
-                                          @endif
+                                            @if(Auth::user()->avatar)
+                                                <div class="rounded-circle overflow-hidden mx-2" style="width: 32px; height: 32px;">
+                                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                                        alt="avatar"
+                                                        class="w-100 h-100"
+                                                        style="object-fit: cover;">
+                                                </div>
+                                                @else
+                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-2" style="width: 32px; height: 32px;">
+                                                    <span class="text-white fw-bold">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                                </div>
+                                            @endif
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
                                             <a class="dropdown-item d-flex align-items-center" href="{{ route('users.akun') }}">
@@ -150,9 +189,8 @@
                                             </form>
                                         </div>
                                 </li>
-                        @endguest
+                            @endguest
                         </ul>
-                    </div>
                 </div>
             </nav>
             <main class="py-4 px-4">

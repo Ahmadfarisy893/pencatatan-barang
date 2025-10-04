@@ -17,7 +17,7 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-        <table class="table table-bordered table-responsive table-hover align-middle text-center rounded-3 overflow-hidden">
+        <table class="table table-bordered table-responsive table-hover align-middle text-center overflow-hidden" id="tabelPeminjaman">
             <thead class="table-primary">
                 <tr>
                     <th>No</th>
@@ -36,7 +36,22 @@
                     <tr>
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $loan->nip }}</td>
-                        <td>{{ $loan->nama_pegawai }}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                    <li
+                                    data-bs-toggle="tooltip"
+                                    data-popup="tooltip-custom"
+                                    data-bs-placement="top"
+                                    class="avatar avatar-xs pull-up"
+                                    title="{{ $loan->nama_pegawai }}"
+                                    >
+                                  <img src="{{ asset('image/pegawai/' . $loan->foto_pegawai) }}" alt="Avatar" class="rounded-circle" height="24" width="24" />
+                                    </li>
+                                </ul>
+                                {{ $loan->nama_pegawai }}
+                            </div>
+                        </td>
                         <td>{{ optional($loan->barang)->nama_barang }}</td>
                         <td>{{ optional(optional($loan->barang)->category)->name }}</td>
                         <td>{{ $loan->jumlah }}</td>
@@ -69,29 +84,49 @@
     </ul>
 </div>
 
-{{-- CSS khusus --}}
 <style>
-    /* Supaya sudut tabel melengkung */
-    .table {
-        border-collapse: separate;
-        border-spacing: 0;
-        border-radius: 0.75rem; /* radius 12px */
-        box-shadow: 1px 2px 1px 2px rgba(0, 0, 0, 0.1);
-    }
-    
     tbody {
         background-color: #F8FAFC; /* Warna latar belakang tabel */
         color: #030303ff;
     }
     .highlight {
-    background-color: yellow;
-    padding: 2px 4px;
-    border-radius: 3px;
+        background-color: yellow;
+        padding: 2px 4px;
+        border-radius: 3px;
     }
     .pagination .page-item.active .page-link {
-    background-color: #2a83dcff;
-    border-color: #2a83dcff;
-    color: white;
+        background-color: #2a83dcff;
+        border-color: #2a83dcff;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+
+        #tabelPeminjaman {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        #tabelPeminjaman th, 
+        #tabelPeminjaman td {
+            padding: 12px 20px;     /* lebih lega */
+            text-align: center;
+            white-space: nowrap;
+            border-top: 1px solid #000000ff;
+        }
+
+        #tabelPeminjaman thead {
+            display: none;
+            width: 100%;
+            table-layout: auto;
+        }
+
+        #tabelPeminjaman tbody {
+            display: block;  
+            overflow-x: auto;
+            white-space: nowrap;
+        }
     }
 </style>
 

@@ -1,16 +1,35 @@
 @extends('layouts.index')
 
 @section('content')
+<style>
+     @media (max-width: 768px) {
+        #badges {
+            width: 100%;
+            font-size: 15px;
+        }
+        #role {
+            font-size: 15px;
+        }
+        #user {
+            font-size: 20px;
+        }
+        .row.cards-row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .row.cards-row > .col-12 {
+            width: 50%;
+        }
+     }
+</style>
 <div class="card">
   <div class="d-flex align-items-end row">
     <div class="col-sm-7">
       <div class="card-body">
-        <h5 class="card-title text-primary">Congratulations  {{ Auth::user()->name }} 🎉</h5>
-          
-        <p class="mb-4">
+        <h5 class="card-title text-primary" id="user">Congratulations  {{ Auth::user()->name }} 🎉</h5>
+        <p class="mb-4" id="role">
           Role Anda: {{ Auth::user()->role }}
         </p>
-        <a href="" class="btn btn-sm btn-primary">View Badges</a>
       </div>
       </div>    
     <div class="col-sm-5 text-center text-sm-left">
@@ -27,103 +46,55 @@
   </div>
 </div>
 <div class="col-lg-12 mt-4">
-  <div class="row">
+  <div class="row cards-row">
     <!-- Card 1 -->
     <div class="col-lg-3 col-md-6 col-12 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="card-title d-flex align-items-start justify-content-between">
+      <div class="card h-100 text-center">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
             <div class="avatar flex-shrink-0">
-              <img src="{{ asset('sneat/assets/img/icons/unicons/chart-success.png') }}" alt="chart success" class="rounded" />
+              <img src="{{ asset('sneat/assets/img/icons/unicons/person.png') }}" alt="Pegawai" class="rounded" height="50" />
             </div>
-            <div class="dropdown">
-              <button class="btn p-0" type="button" data-bs-toggle="dropdown">
-                <i class="bx bx-dots-vertical-rounded"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="#">View More</a>
-                <a class="dropdown-item" href="#">Delete</a>
-              </div>
-            </div>
-          </div>
-          <span class="fw-semibold d-block mb-1">Profit</span>
-          <h3 class="card-title mb-2">$12,628</h3>
-          <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
+          <span class="fw-semibold d-block mb-1">Pegawai</span>
+          <h3 class="card-title mb-1">{{ $jumlahPegawai }}</h3>
         </div>
       </div>
     </div>
 
     <!-- Card 2 -->
     <div class="col-lg-3 col-md-6 col-12 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="card-title d-flex align-items-start justify-content-between">
+      <div class="card h-100 text-center">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
             <div class="avatar flex-shrink-0">
-              <img src="{{ asset('sneat/assets/img/icons/unicons/wallet-info.png') }}" alt="Credit Card" class="rounded" />
+              <img src="{{ asset('sneat/assets/img/icons/unicons/item.png') }}" alt="Credit Card" class="rounded" height="50"/>
             </div>
-            <div class="dropdown">
-              <button class="btn p-0" type="button" data-bs-toggle="dropdown">
-                <i class="bx bx-dots-vertical-rounded"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="#">View More</a>
-                <a class="dropdown-item" href="#">Delete</a>
-              </div>
-            </div>
-          </div>
-          <span>Sales</span>
-          <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-          <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
+          <span>Barang</span>
+          <h3 class="card-title text-nowrap mb-1">{{ $jumlahBarang }}</h3>
         </div>
       </div>
     </div>
 
     <!-- Card 3 -->
     <div class="col-lg-3 col-md-6 col-12 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="card-title d-flex align-items-start justify-content-between">
+      <div class="card h-100 text-center">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
             <div class="avatar flex-shrink-0">
-              <img src="{{ asset('sneat/assets/img/icons/unicons/wallet-info.png') }}" alt="Credit Card" class="rounded" />
+              <img src="{{ asset('sneat/assets/img/icons/unicons/people.png') }}" alt="Credit Card" class="rounded" height="50"/>
             </div>
-            <div class="dropdown">
-              <button class="btn p-0" type="button" data-bs-toggle="dropdown">
-                <i class="bx bx-dots-vertical-rounded"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="#">View More</a>
-                <a class="dropdown-item" href="#">Delete</a>
-              </div>
-            </div>
-          </div>
-          <span>Sales</span>
-          <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-          <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
+          <span>Peminjaman</span>
+          <h3 class="card-title text-nowrap mb-1">{{ $jumlahPeminjaman }}</h3>
         </div>
       </div>
     </div>
 
     <!-- Card 4 -->
     <div class="col-lg-3 col-md-6 col-12 mb-4">
-      <div class="card h-100">
-        <div class="card-body">
-          <div class="card-title d-flex align-items-start justify-content-between">
-            <div class="avatar flex-shrink-0">
-              <img src="{{ asset('sneat/assets/img/icons/unicons/wallet-info.png') }}" alt="Credit Card" class="rounded" />
-            </div>
-            <div class="dropdown">
-              <button class="btn p-0" type="button" data-bs-toggle="dropdown">
-                <i class="bx bx-dots-vertical-rounded"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="#">View More</a>
-                <a class="dropdown-item" href="#">Delete</a>
-              </div>
-            </div>
+      <div class="card h-100 text-center">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <div class="avatar flex-shrink-0">
+            <img src="{{ asset('sneat/assets/img/icons/unicons/users.png') }}" alt="Users" class="rounded" height="50" />
           </div>
-          <span>Sales</span>
-          <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-          <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
+          <span>Users</span>
+          <h3 class="card-title text-nowrap mb-1">{{ $jumlahUser }}</h3>
         </div>
       </div>
     </div>

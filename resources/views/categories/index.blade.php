@@ -1,4 +1,4 @@
-@extends('dashboard')
+@extends('layouts.index')
 
 @section('content')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
             {{ session('success') }}
         </div>
     @endif
-    <table class="table table-bordered table-striped table-responsive table-hover align-middle text-center rounded-3 overflow-hidden">
+    <table class="table table-bordered table-striped table-responsive table-hover align-middle text-center rounded-3 overflow-hidden" id="tabelCategories">
         <thead class="table-primary">
             <tr>
                 <th>No</th>
@@ -50,27 +50,38 @@
 </div>
 
 <style>
-    /* Supaya sudut tabel melengkung */
-    .table {
-        border-collapse: separate;
-        border-spacing: 0;
-        border-radius: 0.75rem; /* radius 12px */
-        box-shadow: 1px 2px 1px 2px rgba(0, 0, 0, 0.1);
-    }
-    
+
     tbody {
         background-color: #F8FAFC; /* Warna latar belakang tabel */
         color: #030303ff;
     }
     .highlight {
-    background-color: yellow;
-    padding: 2px 4px;
-    border-radius: 3px;
+        background-color: yellow;
+        padding: 2px 4px;
+        border-radius: 3px;
     }
     .pagination .page-item.active .page-link {
-    background-color: #2a83dcff;
-    border-color: #2a83dcff;
-    color: white;
+        background-color: #2a83dcff;
+        border-color: #2a83dcff;
+        color: white;
+    }
+    @media (max-width: 768px) {
+
+        #tabelCategories {
+            border-collapse: collapse;
+        }
+
+        #tabelCategories th, 
+        #tabelCategories td {
+            padding: 12px 20px;     /* lebih lega */
+            text-align: center;
+            white-space: nowrap;
+            border-top: 1px solid black;
+        }
+
+        #tabelCategories thead {
+           display: none;
+        }
     }
 </style>
 
